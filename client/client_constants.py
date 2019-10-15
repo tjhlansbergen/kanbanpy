@@ -1,0 +1,1 @@
+APP_NAME_VERSION = "kanbanpy v0.1"
