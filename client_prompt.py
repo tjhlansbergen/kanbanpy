@@ -6,6 +6,7 @@
     Datum: 16 okt 2019
 """
 
+from client_dispatcher import ClientDispatcher
 from kbprompt import KBPrompt
 from kbcard import KBCard
 import constants
@@ -23,10 +24,9 @@ class ClientPrompt(KBPrompt):
 
         # en de commando's specifiek voor deze implementatie
         self.commands = {
+            "test": "test",
             "create card": "ccard",
-            "read card": "rcard",
-            "update card": "ucard",
-            "delete card": "dcard",
+            "move card": "mcard",
             "list board": "lboard",
             "pretty board": "pboard",
             "help": "help",
@@ -38,6 +38,20 @@ class ClientPrompt(KBPrompt):
         print(constants.MSG_HELP_MSG)
 
     def ccard(self):
+        # maak en vul een card object
         card = KBCard()
         card.fillCard()
-        print(pickle.dumps(card))
+
+        # start de dispatcher (op zijn eigen thread), en verzend de card naar de server
+        dispatcher = ClientDispatcher(card)
+        dispatcher.start()
+
+    def test(self):
+        card = KBCard()
+        card.title = "test_title"
+        card.team = "test team"
+        card.project = "test project"
+        card.description = "some descriptive text"
+        dispatcher = ClientDispatcher(card)
+        dispatcher.start()
+        

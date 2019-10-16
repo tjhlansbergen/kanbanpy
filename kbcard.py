@@ -1,9 +1,10 @@
-""" kbcard.py: card klasse, representeert één card op een kanban board
+""" kbcard.py: card klasse, representeert één card op het kanban board
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 15 okt 2019
+    Datum: 16 okt 2019
 """
+
 import constants
 import config
 
@@ -12,16 +13,13 @@ class KBCard():
     # constructor
     def __init__(self):
         self.id = None
-        self.team = None
-        self.project = None
-        self.title = None
-        self.description = None
+        self.team = ""
+        self.project = ""
+        self.title = ""
+        self.description = ""
         self.stage = 0
 
-        
-
-    # functie voor het creeeren van nieuwe card
-    # returntype: KBCard
+    # functie voor het ophalen van gebruikers input voor de card
     def fillCard(self):
 
         # vraag gebruiker om team en/of project
@@ -44,6 +42,7 @@ class KBCard():
             print(constants.MSG_TITLE_BLANK)
             user_title = input(constants.INP_DESCRIPTION)
         
+        # verwerk input in kbcard object
         self.team = user_team
         self.project = user_project
         self.title = user_title

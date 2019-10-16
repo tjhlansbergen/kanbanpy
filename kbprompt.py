@@ -33,6 +33,7 @@ class KBPrompt(ABC):
             if(method == "not_implemented"):
                 print(constants.MSG_NOT_IMPLEMENTED)
             else:
+                # roep de gekozen methode aan
                 method()
 
     # globale methodes voor menu-opties
