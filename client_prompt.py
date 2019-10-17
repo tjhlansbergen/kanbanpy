@@ -1,5 +1,5 @@
 
-""" client_prompt.py: commandline interface voor de kanbanpy applicatie
+""" client_prompt.py: commandline interface voor de kanbanpy client applicatie
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
@@ -13,7 +13,7 @@ import constants
 import pickle
 
 
-# implementie van abstracte klasse KBPrompt specifieke 
+# implementie van abstracte klasse KBPrompt
 class ClientPrompt(KBPrompt):
     
     # constructor

@@ -9,6 +9,7 @@
 import os
 import constants
 from client_prompt import ClientPrompt
+from server_prompt import ServerPrompt
 
 # klasse voor kanbanpy applicatie
 class kanbanpy:
@@ -32,7 +33,8 @@ class kanbanpy:
         # server of client starten
         if context == "SERVER":
             # server, toon events
-            print(constants.MSG_NOT_IMPLEMENTED)
+            server = ServerPrompt()
+            server.show()
 
         elif context == "CLIENT":
             # client, toon de applicatie input-prompt

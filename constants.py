@@ -7,7 +7,7 @@
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.1"
+APP_VERSION = "v0.3"
 
 INP_SERVER_CLIENT = "Run as server or client (s/c)? "
 INP_TEAM = "Specify a team name, or leave blank: "
