@@ -44,6 +44,7 @@ class ClientPrompt(KBPrompt):
 
         # start de dispatcher (op zijn eigen thread), en verzend de card naar de server
         dispatcher = ClientDispatcher(card)
+        # dispatcher.daemon = True  ?? needed?
         dispatcher.start()
 
     def test(self):

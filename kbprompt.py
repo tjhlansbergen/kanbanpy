@@ -26,7 +26,7 @@ class KBPrompt(ABC):
         while self.user_exit == False:
 
             # toon prompt
-            user_in = input(">> ")
+            user_in = input(constants.KB_PROMPT)
             
             # verifier de input, en voer uit         
             method = getattr(self, self.commands.get(user_in, "invalid"), "not_implemented") 

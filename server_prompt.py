@@ -6,6 +6,7 @@
     Datum: 17 okt 2019
 """
 
+from server_listener import ServerListener
 from kbprompt import KBPrompt
 import constants
 
@@ -26,5 +27,8 @@ class ServerPrompt(KBPrompt):
         }
 
     def test(self):
-        print('server says hi')
+        listener = ServerListener()
+        # maak een deamon thread van listener zodat deze actief blijf maar stopt als de applicatie stopt
+        listener.daemon = True  
+        listener.start()
         

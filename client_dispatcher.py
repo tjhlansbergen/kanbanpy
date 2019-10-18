@@ -8,6 +8,7 @@
 
 from threading import Thread 
 from kbcard import KBCard
+import constants
 import config
 import pickle
 import socket
@@ -28,18 +29,25 @@ class ClientDispatcher(Thread):
         dump = pickle.dumps(self.card)
 
         # verstuur naar server
-        result = self.sendData(dump)
+        self.sendData(dump)
 
-    def sendData(self, data: str) -> bool:
-        
+    def sendData(self, data: str):
+
         # creeer een socket object, verbind naar server en stuur de card als string
-        # TODO exception handling!!
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((socket.gethostname(), config.SERVER_PORT))
-            s.sendall(data)
-            reply = s.recv(1024)
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.connect((socket.gethostname(), config.SERVER_PORT))
+                s.sendall(data)
+                reply = s.recv(1024)
 
-        print('Received', repr(reply))
+                # controleer de reactie van de server
+                if reply.decode() != constants.KB_SUCCES:
+                    print("\n{0}\n{1}".format(constants.ERR_RECIEVING_CARD, constants.KB_PROMPT), end='')
 
-        #TODO return afhankelijk van reply
-        return True
+        # exceptie verwerking
+        except Exception as e:
+            print("\n" + constants.ERR_SENDING_CARD)
+            print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
+
+
+

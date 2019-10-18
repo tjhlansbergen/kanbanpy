@@ -7,13 +7,18 @@
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.3"
+APP_VERSION = "v0.4"
+KB_SUCCES = "succes"
+KB_PROMPT = ">> "
 
 INP_SERVER_CLIENT = "Run as server or client (s/c)? "
 INP_TEAM = "Specify a team name, or leave blank: "
 INP_PROJECT = "Specify a project name, or leave blank: "
 INP_TITLE = "Specify a title for your card: "
 INP_DESCRIPTION = "Specify a description (max 120 characters): "
+
+ERR_SENDING_CARD = "Error sending card to server: "
+ERR_RECIEVING_CARD = "Error, a card was send but not succesfully received "
 
 MSG_TITLE_BLANK = "Card title should not be blank or too long"
 MSG_DESCRIPTION_TOLONG = "Card description is too long"
