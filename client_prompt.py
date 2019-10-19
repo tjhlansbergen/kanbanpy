@@ -47,6 +47,7 @@ class ClientPrompt(KBPrompt):
         # dispatcher.daemon = True  ?? needed?
         dispatcher.start()
 
+    # test methode voor het aanmaken en versturen van een card
     def test(self):
         card = KBCard()
         card.title = "test_title"

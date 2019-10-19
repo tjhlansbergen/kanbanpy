@@ -7,6 +7,7 @@
 """
 
 from server_listener import ServerListener
+from server_database import ServerDB
 from kbprompt import KBPrompt
 import constants
 
@@ -23,10 +24,15 @@ class ServerPrompt(KBPrompt):
         # en de commando's specifiek voor deze implementatie
         self.commands = {
             "test": "test",
+            "listen": "listen",
             "exit": "exit"
         }
 
     def test(self):
+        db = ServerDB()
+        db.createDB()
+
+    def listen(self):
         listener = ServerListener()
         # maak een deamon thread van listener zodat deze actief blijf maar stopt als de applicatie stopt
         listener.daemon = True  
