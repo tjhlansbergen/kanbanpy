@@ -11,33 +11,54 @@ import constants
 import config
 
 class ServerDB():
+
+    # bepaal het pad van de databasefile (als class-variable, want gedeeld door alle instances van de klasse)
+    dbfile = Path(Path.home(), constants.DB_FILE)
+
     def __init__(self):
 
-        # bepaal het pad van de databasefile
-        self.dbfile = Path(Path.home(), constants.DB_FILE)
-
-        # check of er al een database bestaat, anders maak deze aan
-        if not self.dbfile.is_file():
-            self.createDB()
-
-    def createDB(self):
-
         # probeer een connectie naar de db te maken, als deze nog niet bestaat wordt een nieuwe db-file aangemaakt
-        # en creeer de benodigde tabel
         try:
             # verbind naar database
-            dbconnection = sqlite3.connect(self.dbfile)
-            
-            # maak tabel
-            cursor = dbconnection.cursor()
-            cursor.execute(config.SQL_CREATE_CARDS_TABLE)
+            self.connection = sqlite3.connect(ServerDB.dbfile)
+            self.cursor = self.connection.cursor()
+
+            # maak tabel als deze nog niet bestaat
+            self.cursor.execute(config.SQL_CREATE_CARDS_TABLE)
 
         # exceptie afhandeling
         except sqlite3.Error as e:
-            print("\n" + constants.ERR_CREATING_DB)
+            print("\n" + constants.ERR_DB_CREATION)
             print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
 
-        # sluit de connection (ongeacht evt. foutmeldingen)    
-        finally:
-            if dbconnection:
-                dbconnection.close()
+
+    # maakt het mogelijk te instantieren met 'with ServerDB'
+    def __enter__(self):
+        return self
+
+
+    # sluit de verbinding automatisch wanneer database geinstantieerd was met 'with ServerDB'
+    def __exit__(self, ext_type, exc_value, traceback):
+        self.cursor.close()
+        self.connection.close()
+
+
+    # voeg nieuw card toe aan de database
+    # return type: int, retourneert de automatisch opgehoogde id van de database regel
+    def insertCard(self, card) -> int:
+
+        # probeer sql INSERT INTO commando uit te voeren
+        try:
+            self.cursor.execute(config.SQL_INSERT_CARD, card.team, card.project, card.title, card.description, card.stage)
+            return self.cursor.lastrowid
+        
+        # exceptie afhandeling
+        except Exception as e: #sqlite3.Error
+            print("\n" + constants.ERR_DB_INSERTION)
+            print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
+            return None
+
+
+    # maakt wijzigingen definitief
+    def commit(self):
+        self.connection.commit()

@@ -22,7 +22,8 @@ INP_DESCRIPTION = "Specify a description (max 120 characters): "
 
 ERR_SENDING_CARD = "Error sending card to server: "
 ERR_RECIEVING_CARD = "Error, a card was send but not succesfully received "
-ERR_CREATING_DB = "Error bij het aanmaken van een nieuwe database: "
+ERR_DB_CREATION = "Error bij het aanmaken van een nieuwe database: "
+ERR_DB_INSERTION = "Error bij het invoegen van nieuwe data in de database: "
 
 MSG_TITLE_BLANK = "Card title should not be blank or too long"
 MSG_DESCRIPTION_TOLONG = "Card description is too long"

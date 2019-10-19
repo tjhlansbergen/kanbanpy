@@ -9,6 +9,7 @@
 from server_listener import ServerListener
 from server_database import ServerDB
 from kbprompt import KBPrompt
+from kbcard import KBCard
 import constants
 
 
@@ -23,14 +24,24 @@ class ServerPrompt(KBPrompt):
 
         # en de commando's specifiek voor deze implementatie
         self.commands = {
-            "test": "test",
+            "test insert": "testi",
             "listen": "listen",
             "exit": "exit"
         }
 
-    def test(self):
-        db = ServerDB()
-        db.createDB()
+    def testi(self):
+        card = KBCard()
+        card.title = "test_title"
+        card.team = "test team"
+        card.project = "test project"
+        card.description = "some descriptive text"
+
+        with ServerDB() as db:
+            id = db.insertCard(card)
+            db.commit()
+
+        if id is not None:
+            print('card inserted with ID: ', id)
 
     def listen(self):
         listener = ServerListener()
