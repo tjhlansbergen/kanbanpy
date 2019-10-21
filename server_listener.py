@@ -3,10 +3,11 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 18 okt 2019
+    Datum: 21 okt 2019
 """
 
 from threading import Thread 
+import datetime
 import constants
 import config
 import socket
@@ -22,10 +23,15 @@ class ServerListener(Thread):
             s.listen()
 
             while True: # TODO constant strings
+                # inkomende verbinding
                 connection, address = s.accept()
-                print("\nConnection coming from: ", address)
+                print("\n{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_INCOMING, address))
+
+                # ontvang de data
                 data = connection.recv(1024)
-                print("Data:\n", data)  # TODO kan weg
+                print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), len(data), constants.MSG_SERVER_DATARECEIVED))
+
+                #TODO verwerk data
 
                 # stuur reply, en sluit de vebinding
                 connection.sendall(constants.KB_SUCCES.encode())

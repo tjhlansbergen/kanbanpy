@@ -7,7 +7,7 @@
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.4"
+APP_VERSION = "v0.5"
 
 KB_SUCCES = "succes"
 KB_PROMPT = ">> "
@@ -31,6 +31,8 @@ MSG_NO_TEAMORPROJECT = "Team and project cannot both be blank, please specify ei
 MSG_UNKNOWN_COMMAND = "Unknown command, type help for available options"
 MSG_NOT_IMPLEMENTED = "Not yet implemented!"
 MSG_SERVER_LISTENING = "Server is listening on port:"
+MSG_SERVER_INCOMING = "Connection coming from:"
+MSG_SERVER_DATARECEIVED = "bytes of incoming data"
 MSG_CLIENT_HELP = """
 =============================================================================================
 The following options are available on the commandline:

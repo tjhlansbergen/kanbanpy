@@ -3,7 +3,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 17 okt 2019
+    Datum: 21 okt 2019
 """
 
 from server_listener import ServerListener
