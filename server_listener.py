@@ -25,6 +25,9 @@ class ServerListener(Thread):
             while True: # TODO constant strings
                 # inkomende verbinding
                 connection, address = s.accept()
+
+                # TODO nieuwe thread vanaf hier starten voor iedere verbinding?
+
                 print("\n{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_INCOMING, address))
 
                 # ontvang de data
@@ -36,3 +39,5 @@ class ServerListener(Thread):
                 # stuur reply, en sluit de vebinding
                 connection.sendall(constants.KB_SUCCES.encode())
                 connection.close()
+
+       

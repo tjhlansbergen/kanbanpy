@@ -35,7 +35,7 @@ class ClientPrompt(KBPrompt):
 
     # methodes voor menu-opties
     def help(self):
-        print(constants.MSG_HELP_MSG)
+        print(constants.MSG_CLIENT_HELP)
 
     def ccard(self):
         # maak en vul een card object
@@ -44,7 +44,6 @@ class ClientPrompt(KBPrompt):
 
         # start de dispatcher (op zijn eigen thread), en verzend de card naar de server
         dispatcher = ClientDispatcher(card)
-        # dispatcher.daemon = True  ?? needed?
         dispatcher.start()
 
     # test methode voor het aanmaken en versturen van een card
