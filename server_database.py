@@ -59,6 +59,9 @@ class ServerDB():
             return None
 
 
+    #TODO update en delete
+    
+
     # maakt wijzigingen definitief
     def commit(self):
         self.connection.commit()

@@ -22,9 +22,8 @@ class ServerListener(Thread):
             s.listen()
 
             while True: # TODO constant strings
-                print("listening")
                 connection, address = s.accept()
-                print("Connection coming from: ", address)
+                print("\nConnection coming from: ", address)
                 data = connection.recv(1024)
                 print("Data:\n", data)  # TODO kan weg
 

@@ -6,10 +6,12 @@
     Datum: 15 okt 2019
 """
 
-import os
-import constants
-from client_prompt import ClientPrompt
+from server_listener import ServerListener
 from server_prompt import ServerPrompt
+from client_prompt import ClientPrompt
+import constants
+import os
+
 
 # klasse voor kanbanpy applicatie
 class kanbanpy:
@@ -31,15 +33,15 @@ class kanbanpy:
         print(constants.APP_NAME, constants.APP_VERSION, context)
 
         # server of client starten
-        if context == "SERVER":
+        if context == "SERVER":            
             # server, toon events
-            server = ServerPrompt()
-            server.show()
+            serverprompt = ServerPrompt()
+            serverprompt.show()
 
         elif context == "CLIENT":
             # client, toon de applicatie input-prompt
-            client = ClientPrompt()
-            client.show()
+            clientprompt = ClientPrompt()
+            clientprompt.show()
 
 
 if __name__ == "__main__":

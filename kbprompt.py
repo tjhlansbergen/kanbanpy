@@ -15,9 +15,7 @@ class KBPrompt(ABC):
     # constructor
     def __init__(self):
         self.user_exit = False
-        self.commands = {
-            "exit": "exit"
-        }
+        self.commands = {}
     
     # hoofd methode voor het verwerken van commando's
     def show(self):

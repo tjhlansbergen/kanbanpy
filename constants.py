@@ -30,7 +30,8 @@ MSG_DESCRIPTION_TOLONG = "Card description is too long"
 MSG_NO_TEAMORPROJECT = "Team and project cannot both be blank, please specify either a team name, a project name or both"
 MSG_UNKNOWN_COMMAND = "Unknown command, type help for available options"
 MSG_NOT_IMPLEMENTED = "Not yet implemented!"
-MSG_HELP_MSG = """
+MSG_SERVER_LISTENING = "Server is listening on port:"
+MSG_CLIENT_HELP = """
 =============================================================================================
 The following options are available on the commandline:
 
@@ -43,7 +44,16 @@ The following options are available on the commandline:
   pretty board: Shows all cards for a team, project or team + project in a browser
 
   help:         Displays this manual
-  exit:         To exit from the kanbanpy program
+  exit:         To exit the kanbanpy program
+
+=============================================================================================
+"""
+MSG_SERVER_HELP = """
+=============================================================================================
+The following options are available on the commandline:
+
+  help:         Displays this manual
+  exit:         To exit the kanbanpy program
 
 =============================================================================================
 """
