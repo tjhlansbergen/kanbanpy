@@ -7,6 +7,7 @@
 """
 
 from threading import Thread 
+from server_incoming import IncomingConnection
 import datetime
 import constants
 import config
@@ -18,26 +19,20 @@ class ServerListener(Thread):
     # override de run methode die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
+        # with zorgt voor het sluiten van de socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((socket.gethostname(), config.SERVER_PORT))
             s.listen()
 
-            while True: # TODO constant strings
+            # wacht op inkomende verbindingen
+            while True: 
                 # inkomende verbinding
                 connection, address = s.accept()
 
-                # TODO nieuwe thread vanaf hier starten voor iedere verbinding?
+                # nieuwe thread starten (aparte thread voor iedere verbinding)
+                incoming = IncomingConnection(connection, address)
+                incoming.start()
+               
 
-                print("\n{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_INCOMING, address))
-
-                # ontvang de data
-                data = connection.recv(1024)
-                print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), len(data), constants.MSG_SERVER_DATARECEIVED))
-
-                #TODO verwerk data
-
-                # stuur reply, en sluit de vebinding
-                connection.sendall(constants.KB_SUCCES.encode())
-                connection.close()
 
        
