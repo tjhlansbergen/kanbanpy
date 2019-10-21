@@ -6,11 +6,14 @@
     Datum: 16 okt 2019
 """
 
-from client_dispatcher import ClientDispatcher
-from kbprompt import KBPrompt
-from kbcard import KBCard
-import constants
 import pickle
+
+import constants
+from client_dispatcher import ClientDispatcher
+from kbcard import KBCard
+from kbprompt import KBPrompt
+
+
 
 
 # implementie van abstracte klasse KBPrompt

@@ -6,12 +6,13 @@
     Datum: 16 okt 2019
 """
 
-from threading import Thread 
-from kbcard import KBCard
-import constants
-import config
 import pickle
 import socket
+from threading import Thread 
+
+import config
+import constants
+from kbcard import KBCard
 
 
 # klasse die overerft van Thread zodat deze op zijn eigen thread geinstantieerd wordt

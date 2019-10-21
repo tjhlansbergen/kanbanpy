@@ -5,8 +5,9 @@
     Datum: 16 okt 2019
 """
 
-import constants
 import config
+import constants
+
 
 class KBCard():
 

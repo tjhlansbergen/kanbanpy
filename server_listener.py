@@ -6,12 +6,14 @@
     Datum: 21 okt 2019
 """
 
-from threading import Thread 
-from server_incoming import IncomingConnection
 import datetime
+import socket
+from threading import Thread 
+from server_receiver import ServerReceiver
+
 import constants
 import config
-import socket
+
 
 # klasse die overerft van Thread zodat deze op zijn eigen thread geinstantieerd wordt
 class ServerListener(Thread):
@@ -30,7 +32,7 @@ class ServerListener(Thread):
                 connection, address = s.accept()
 
                 # nieuwe thread starten (aparte thread voor iedere verbinding)
-                incoming = IncomingConnection(connection, address)
+                incoming = ServerReceiver(connection, address)
                 incoming.start()
                
 

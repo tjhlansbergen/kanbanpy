@@ -1,9 +1,18 @@
-from threading import Thread
+
+""" server_receiver.py: Asynchrone klasse voor verwerking van inkomende data
+    Auteur: Tako Lansbergen, Novi Hogeschool
+    Studentnr.: 800009968
+    Leerlijn: Python
+    Datum: 21 okt 2019
+"""
+
 import datetime
+from threading import Thread
+
 import constants
 
 # klasse die overerft van Thread zodat deze op zijn eigen thread geinstantieerd wordt, zodat iedere inkomende verbinding op een eigen thread afgehandeld wordt
-class IncomingConnection(Thread):
+class ServerReceiver(Thread):
 
     def __init__(self, connection, address):
         Thread.__init__(self)

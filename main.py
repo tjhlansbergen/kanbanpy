@@ -6,11 +6,12 @@
     Datum: 15 okt 2019
 """
 
+import os
+
+import constants
+from client_prompt import ClientPrompt
 from server_listener import ServerListener
 from server_prompt import ServerPrompt
-from client_prompt import ClientPrompt
-import constants
-import os
 
 
 # klasse voor kanbanpy applicatie

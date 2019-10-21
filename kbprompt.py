@@ -7,6 +7,7 @@
 """
 
 from abc import ABC, abstractmethod # ten behoeve van abstracte klasse (Abstract Base Class)
+
 import constants
 
 # abstracte klasse voor verwerken van gebruikers commando's

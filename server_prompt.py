@@ -6,12 +6,12 @@
     Datum: 21 okt 2019
 """
 
-from server_listener import ServerListener
-from server_database import ServerDB
-from kbprompt import KBPrompt
-from kbcard import KBCard
-import constants
 import config
+import constants
+from kbcard import KBCard
+from kbprompt import KBPrompt
+from server_listener import ServerListener
+from server_database import ServerDatabase
 
 
 # implementie van abstracte klasse KBPrompt 
@@ -47,7 +47,7 @@ class ServerPrompt(KBPrompt):
         card.project = "test project"
         card.description = "some descriptive text"
 
-        with ServerDB() as db:
+        with ServerDatabase() as db:
             id = db.insertCard(card)
             db.commit()
 

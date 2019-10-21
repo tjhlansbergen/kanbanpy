@@ -5,12 +5,14 @@
     Datum: 19 okt 2019
 """
 
-from pathlib import Path
 import sqlite3
-import constants
-import config
+from pathlib import Path
 
-class ServerDB():
+import config
+import constants
+
+
+class ServerDatabase():
 
     # bepaal het pad van de databasefile (als class-variable, want gedeeld door alle instances van de klasse)
     dbfile = Path(Path.home(), constants.DB_FILE)
@@ -20,7 +22,7 @@ class ServerDB():
         # probeer een connectie naar de db te maken, als deze nog niet bestaat wordt een nieuwe db-file aangemaakt
         try:
             # verbind naar database
-            self.connection = sqlite3.connect(ServerDB.dbfile)
+            self.connection = sqlite3.connect(ServerDatabase.dbfile)
             self.cursor = self.connection.cursor()
 
             # maak tabel als deze nog niet bestaat
