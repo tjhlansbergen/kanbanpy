@@ -7,11 +7,22 @@
 """
 
 import datetime
+import pickle
 from threading import Thread
 
+import config
 import constants
+from kbcard import KBCard
+from server_database import ServerDatabase
 
-# klasse die overerft van Thread zodat deze op zijn eigen thread geinstantieerd wordt, zodat iedere inkomende verbinding op een eigen thread afgehandeld wordt
+# klasse die overerft van Thread waardoor deze op zijn eigen thread geinstantieerd wordt, zodat iedere inkomende verbinding op een eigen thread afgehandeld wordt
+# Interface: de ServerReceiver kan de volgende data verwerken:
+#
+# ("create", <Card>)    - voegt een Card object toe aan de database
+# ("read", <Int>)       - retourneert het card object met de corresponderende ID indien aanwezig, anders -1
+# ("update", <Card>)    - Indien Card object met corresponderend ID bestaat wordt deze bijgewerkt.
+# ("delete", <Int>)     - Verwijder Card object uit de database met corresponderend ID indien aanwezig.
+#
 class ServerReceiver(Thread):
 
     def __init__(self, connection, address):
@@ -28,8 +39,78 @@ class ServerReceiver(Thread):
                 data = self.connection.recv(1024)
                 print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), len(data), constants.MSG_SERVER_DATARECEIVED))
 
-                #TODO verwerk data
+                # data deserializeren
+                request = pickle.loads(data)
 
-                # stuur reply, en sluit de vebinding
-                self.connection.sendall(constants.KB_SUCCES.encode())
-                self.connection.close()
+                # controleer inkomende data
+                if type(request) != tuple or request[0] not in config.INTERFACE_COMMANDS:
+
+                    # stuur géén reply, sluit de vebinding en stop uitvoering
+                    self.connection.close()
+                    return
+    
+                # selecteer juiste methode voor verdere verwerking
+                method = getattr(self, request[0], "not_implemented") 
+                if(method == "not_implemented"):
+                    print(constants.MSG_NOT_IMPLEMENTED)
+                else:
+                    # roep de gekozen methode aan
+                    method(request[1])
+
+
+    def create(self, payload):
+        
+        # controleer inkomende data
+        if type(payload) == KBCard:
+
+            # voeg toe aan database
+            with ServerDatabase() as db:
+                db.insertCard(payload)
+                db.commit()
+
+                # stuur reply
+                self.connection.sendall(constants.KB_OK.encode())
+
+        else:
+            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+
+        # sluit de vebinding
+        self.connection.close()
+
+    def read(self, payload):
+        
+        # controleer inkomende data
+        if type(payload) == int:
+            # lees uit database
+            with ServerDatabase() as db:
+                card = db.readCard(payload)
+                
+                # stuur card als reply
+                if card is not None:
+                    self.connection.sendall(pickle.dumps(card))
+        else:
+            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+
+        # sluit de vebinding
+        self.connection.close()
+
+    def update(self):
+        print('update :)')
+
+        # stuur reply, en sluit de vebinding
+        self.connection.sendall(constants.KB_OK.encode())
+        self.connection.close()
+
+    def delete(self):
+        print('delete :)')
+
+        # stuur reply, en sluit de vebinding
+        self.connection.sendall(constants.KB_OK.encode())
+        self.connection.close()
+
+    def list(self):
+        print('list :)')
+
+        # stuur reply, en sluit de vebinding
+        
+        self.connection.close()

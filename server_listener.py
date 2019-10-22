@@ -28,6 +28,7 @@ class ServerListener(Thread):
 
             # wacht op inkomende verbindingen
             while True: 
+                
                 # inkomende verbinding
                 connection, address = s.accept()
 

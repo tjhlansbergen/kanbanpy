@@ -29,9 +29,10 @@ class ClientPrompt(KBPrompt):
         self.commands = {
             "test": "test",
             "create card": "ccard",
+            "read card": "rcard",
             "move card": "mcard",
-            "list board": "lboard",
-            "pretty board": "pboard",
+            "delete card": "dcard",
+            "list cards": "lcards",
             "help": "help",
             "exit": "exit"
         }
@@ -46,8 +47,15 @@ class ClientPrompt(KBPrompt):
         card.fillCard()
 
         # start de dispatcher (op zijn eigen thread), en verzend de card naar de server
-        dispatcher = ClientDispatcher(card)
+        dispatcher = ClientDispatcher(("create", card))
         dispatcher.start()
+
+    def rcard(self):
+        # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
+        dispatcher = ClientDispatcher(("read", 3))  # TODO vraag user input
+        dispatcher.start()
+        # TODO toon resultaat
+
 
     # test methode voor het aanmaken en versturen van een card
     def test(self):
@@ -56,6 +64,6 @@ class ClientPrompt(KBPrompt):
         card.team = "test team"
         card.project = "test project"
         card.description = "some descriptive text"
-        dispatcher = ClientDispatcher(card)
+        dispatcher = ClientDispatcher(("create", card))
         dispatcher.start()
         

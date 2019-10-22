@@ -31,7 +31,6 @@ class ServerPrompt(KBPrompt):
 
         # en de commando's specifiek voor deze implementatie
         self.commands = {
-            "test insert": "testi",
             "help": "help",
             "exit": "exit"
         }
@@ -40,18 +39,3 @@ class ServerPrompt(KBPrompt):
     def help(self):
         print(constants.MSG_SERVER_HELP)
 
-    def testi(self):
-        card = KBCard()
-        card.title = "test_title"
-        card.team = "test team"
-        card.project = "test project"
-        card.description = "some descriptive text"
-
-        with ServerDatabase() as db:
-            id = db.insertCard(card)
-            db.commit()
-
-        if id is not None:
-            print('card inserted with ID: ', id)
-
-        

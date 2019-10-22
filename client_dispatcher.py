@@ -18,36 +18,36 @@ from kbcard import KBCard
 # klasse die overerft van Thread zodat deze op zijn eigen thread geinstantieerd wordt
 class ClientDispatcher(Thread):
 
-    # override de constructor om parameter (het card object) aan de klasse mee te kunnen geven
-    def __init__(self, card: KBCard):
+    # override de constructor om parameter aan de klasse mee te kunnen geven
+    def __init__(self, request: tuple):
         Thread.__init__(self)
-        self.card = card
+        self.request = request
 
     # override de run methode die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
         # creeer pickle als string
-        dump = pickle.dumps(self.card)
+        dump = pickle.dumps(self.request)
 
         # verstuur naar server
         self.sendData(dump)
 
     def sendData(self, data: str):
 
-        # creeer een socket object, verbind naar server en stuur de card als string
+        # creeer een socket object, verbind naar server en stuur de request als string
         try:
             with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.connect((socket.gethostname(), config.SERVER_PORT))
                 s.sendall(data)
                 reply = s.recv(1024)
 
-                # controleer de reactie van de server
-                if reply.decode() != constants.KB_SUCCES:
-                    print("\n{0}\n{1}".format(constants.ERR_RECIEVING_CARD, constants.KB_PROMPT), end='')
+                # controleer de reactie van de server # TODO voor de verschillende requests (wellicht beter returnen?)
+                if reply.decode() != constants.KB_OK:
+                    print("\n{0}\n{1}".format(constants.ERR_RECEIVING_REQUEST, constants.KB_PROMPT), end='')
 
         # exceptie verwerking
         except Exception as e:
-            print("\n" + constants.ERR_SENDING_CARD)
+            print("\n" + constants.ERR_SENDING_REQUEST)
             print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
 
 

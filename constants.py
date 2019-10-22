@@ -9,7 +9,8 @@
 APP_NAME = "kanbanpy"
 APP_VERSION = "v0.5"
 
-KB_SUCCES = "succes"
+KB_OK = "succes"
+KB_NOT_OK = "error"
 KB_PROMPT = ">> "
 
 DB_FILE = ".kanbanpy.db"
@@ -20,8 +21,8 @@ INP_PROJECT = "Specify a project name, or leave blank: "
 INP_TITLE = "Specify a title for your card: "
 INP_DESCRIPTION = "Specify a description (max 120 characters): "
 
-ERR_SENDING_CARD = "Error sending card to server: "
-ERR_RECIEVING_CARD = "Error, a card was send but not succesfully received "
+ERR_SENDING_REQUEST = "Error sending request to server: "
+ERR_RECEIVING_REQUEST = "Error, a request was send but not succesfully received "
 ERR_DB_CREATION = "Error bij het aanmaken van een nieuwe database: "
 ERR_DB_INSERTION = "Error bij het invoegen van nieuwe data in de database: "
 
@@ -33,17 +34,19 @@ MSG_NOT_IMPLEMENTED = "Not yet implemented!"
 MSG_SERVER_LISTENING = "Server is listening on port:"
 MSG_SERVER_INCOMING = "Connection coming from:"
 MSG_SERVER_DATARECEIVED = "bytes of incoming data"
+MSG_SERVER_DBCREATE = "CREATE: Added item to database with ID ="
+MSG_SERVER_DBREAD = "READ: Returning item with ID ="
+MSG_SERVER_INCORRECTTYPE = "Incoming data not accepted, payload is of incorrect type"
+MSG_SERVER_NORESULT = "Requested item found"
 MSG_CLIENT_HELP = """
 =============================================================================================
 The following options are available on the commandline:
 
   create card:  Adds a new card to the repository, pinned to either a project, a team or both
   read card:    Reads a single card from the repository
-  update card:  To edit an existing card in the repository
+  move card:    Edits the stage of an existing card in the repository
   delete card:  To permanently delete a card from the repository
-
-  list board:   To list all cards filterd by team, project or both
-  pretty board: Shows all cards for a team, project or team + project in a browser
+  list cards:   Lists all cards
 
   help:         Displays this manual
   exit:         To exit the kanbanpy program
