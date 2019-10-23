@@ -20,6 +20,7 @@ INP_TEAM = "Specify a team name, or leave blank: "
 INP_PROJECT = "Specify a project name, or leave blank: "
 INP_TITLE = "Specify a title for your card: "
 INP_DESCRIPTION = "Specify a description (max 120 characters): "
+INP_CARDNUMBER = "Specify Card number: "
 
 ERR_SENDING_REQUEST = "Error sending request to server: "
 ERR_RECEIVING_REQUEST = "Error, a request was send but not succesfully received "
@@ -36,8 +37,12 @@ MSG_SERVER_INCOMING = "Connection coming from:"
 MSG_SERVER_DATARECEIVED = "bytes of incoming data"
 MSG_SERVER_DBCREATE = "CREATE: Added item to database with ID ="
 MSG_SERVER_DBREAD = "READ: Returning item with ID ="
+
+MSG_SERVER_DBDELETE = "DELETE: Removed card from database with ID ="
 MSG_SERVER_INCORRECTTYPE = "Incoming data not accepted, payload is of incorrect type"
-MSG_SERVER_NORESULT = "Requested item found"
+MSG_SERVER_RESULT = "Requested item returned"
+MSG_SERVER_NORESULT = "Requested item not found"
+MSG_CLIENT_NOCARD = "No card found with specified ID"
 MSG_CLIENT_HELP = """
 =============================================================================================
 The following options are available on the commandline:

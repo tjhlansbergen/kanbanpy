@@ -68,8 +68,8 @@ class ServerReceiver(Thread):
                 db.insertCard(payload)
                 db.commit()
 
-                # stuur reply
-                self.connection.sendall(constants.KB_OK.encode())
+            # stuur reply
+            self.connection.sendall(constants.KB_OK.encode())
 
         else:
             print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
@@ -86,8 +86,7 @@ class ServerReceiver(Thread):
                 card = db.readCard(payload)
                 
                 # stuur card als reply
-                if card is not None:
-                    self.connection.sendall(pickle.dumps(card))
+                self.connection.sendall(pickle.dumps(card))
         else:
             print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
 
@@ -101,15 +100,28 @@ class ServerReceiver(Thread):
         self.connection.sendall(constants.KB_OK.encode())
         self.connection.close()
 
-    def delete(self):
-        print('delete :)')
+    def delete(self, payload):
 
-        # stuur reply, en sluit de vebinding
-        self.connection.sendall(constants.KB_OK.encode())
+        # controleer inkomende data
+        if type(payload) == int:
+
+            # verwijder uit database
+            with ServerDatabase() as db:
+                db.deleteCard(payload)
+                db.commit()
+            
+            # stuur reply
+            self.connection.sendall(constants.KB_OK.encode())
+
+        else:
+            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+
+
+        # sluit de vebinding
         self.connection.close()
 
-    def list(self):
-        print('list :)')
+    def listall(self):
+        print('list all :)')
 
         # stuur reply, en sluit de vebinding
         

@@ -66,7 +66,7 @@ class ServerDatabase():
 
     # lees card uit de database, returntype: KBCard
     def readCard(self, idnr: int) -> KBCard:
-        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr, constants.KB_PROMPT), end='')
+        print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr))
         
         # voer sql SELECT uit en lees de eerste regel uit de response
         self._execute(sql.SQL_READ_CARD, (idnr, ))
@@ -82,14 +82,21 @@ class ServerDatabase():
             card.description = result["description"]
             card.stage = result["stage"]
 
+            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_RESULT, constants.KB_PROMPT), end='')
             return card
 
         else:
-            print("{0} :: {1}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
+            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
             return None
 
-    #TODO update en delete
-    
+    #TODO update
+
+    def deleteCard(self, idnr: int):
+
+        # voer sql DELETE statement uit
+        self._execute(sql.SQL_DELETE_CARD, (idnr, ))
+        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBDELETE, idnr, constants.KB_PROMPT), end='')
+
 
     # maakt wijzigingen definitief
     def commit(self):

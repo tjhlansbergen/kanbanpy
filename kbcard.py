@@ -20,6 +20,19 @@ class KBCard():
         self.description = ""
         self.stage = 0
 
+    # card weergave in terminal
+    def print(self) -> str:
+        return '\n'.join([
+            "\n+-------------->\n"
+            "| Cardnumber: {}".format(self.id),
+            "| Title: {}".format(self.title),
+            "| Team: {}".format(self.team),
+            "| Project: {}".format(self.project),
+            "| Stage: {}".format(self.stage),
+            "| Description: {}".format(self.description),
+            "+-------------->\n"
+            ])
+
     # functie voor het ophalen van gebruikers input voor de card
     def fillCard(self):
 

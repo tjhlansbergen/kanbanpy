@@ -51,11 +51,30 @@ class ClientPrompt(KBPrompt):
         dispatcher.start()
 
     def rcard(self):
-        # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("read", 3))  # TODO vraag user input
-        dispatcher.start()
-        # TODO toon resultaat
 
+        # vraag de user om het card nummer
+        user_in = input(constants.INP_CARDNUMBER)
+        if user_in.isdigit():
+            idnr = int(user_in)
+        else:
+            return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
+
+        # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
+        dispatcher = ClientDispatcher(("read", idnr))  # TODO vraag user input
+        dispatcher.start()
+
+    def dcard(self):
+
+        # vraag de user om het card nummer
+        user_in = input(constants.INP_CARDNUMBER)
+        if user_in.isdigit():
+            idnr = int(user_in)
+        else:
+            return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
+
+        # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
+        dispatcher = ClientDispatcher(("delete", idnr))  # TODO vraag user input
+        dispatcher.start()
 
     # test methode voor het aanmaken en versturen van een card
     def test(self):

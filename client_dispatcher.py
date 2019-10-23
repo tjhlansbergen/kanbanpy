@@ -26,13 +26,24 @@ class ClientDispatcher(Thread):
     # override de run methode die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
+        # voorkom het versturen van bad request vanaf client-zijde
+        if type(self.request) != tuple or self.request[0] not in config.INTERFACE_COMMANDS:
+            print("{0}\n{1}".format(constants.ERR_SENDING_REQUEST, constants.KB_PROMPT), end='')
+            return
+
         # creeer pickle als string
         dump = pickle.dumps(self.request)
 
         # verstuur naar server
-        self.sendData(dump)
+        reply = self.sendData(dump)
+
+        # verwerkt antwoord
+        self.receiveData(reply)
 
     def sendData(self, data: str):
+
+        # return variabele
+        reply = None
 
         # creeer een socket object, verbind naar server en stuur de request als string
         try:
@@ -41,14 +52,35 @@ class ClientDispatcher(Thread):
                 s.sendall(data)
                 reply = s.recv(1024)
 
-                # controleer de reactie van de server # TODO voor de verschillende requests (wellicht beter returnen?)
-                if reply.decode() != constants.KB_OK:
-                    print("\n{0}\n{1}".format(constants.ERR_RECEIVING_REQUEST, constants.KB_PROMPT), end='')
-
         # exceptie verwerking
         except Exception as e:
             print("\n" + constants.ERR_SENDING_REQUEST)
             print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
+
+        return reply
+
+    def receiveData(self, data):
+
+        # controleer input
+        if data is None:
+            return
+
+        # check soort request
+        if self.request[0] == "read":
+
+            # controleer de reactie van de server
+            card = pickle.loads(data)
+            if type(card) != KBCard:
+                print("\n{0}\n{1}".format(constants.MSG_CLIENT_NOCARD, constants.KB_PROMPT), end='')
+                return
+
+            # toon resultaat aan gebruiker
+            print("{0}\n{1}".format(card.print(), constants.KB_PROMPT), end='')
+
+        else:   # create, update, delete
+            # controleer de reactie van de server
+            if data.decode() != constants.KB_OK:
+                print("\n{0}\n{1}".format(constants.ERR_RECEIVING_REQUEST, constants.KB_PROMPT), end='')
 
 
 

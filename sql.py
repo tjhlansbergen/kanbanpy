@@ -23,4 +23,6 @@ SQL_INSERT_CARD = """ INSERT INTO Cards (
                                 stage)
                                 VALUES (?,?,?,?,?); """
 
-SQL_READ_CARD = """ SELECT * from Cards WHERE id = ?;"""
+SQL_READ_CARD = """ SELECT * from Cards WHERE id = ?; """
+
+SQL_DELETE_CARD = """ DELETE FROM Cards WHERE id = ?; """
