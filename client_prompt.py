@@ -10,10 +10,8 @@ import pickle
 
 import constants
 from client_dispatcher import ClientDispatcher
-from kbcard import KBCard
+from kbcard import KBCard, Stage
 from kbprompt import KBPrompt
-
-
 
 
 # implementie van abstracte klasse KBPrompt
@@ -57,8 +55,9 @@ class ClientPrompt(KBPrompt):
         if user_in.isdigit():
             idnr = int(user_in)
         else:
-            return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
-
+            print(constants.MSG_CLIENT_INVALID_CARDNUMBER)
+            return
+            
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
         dispatcher = ClientDispatcher(("read", idnr))
         dispatcher.start()
@@ -67,12 +66,19 @@ class ClientPrompt(KBPrompt):
 
         # vraag de user om het card nummer en stage
         id_in = input(constants.INP_CARDNUMBER)
-        stage_in = input(constants.INP_STAGE)
-        if id_in.isdigit() & stage_in.isdigit():
-            idnr = int(id_in)
-            stage = int(stage_in)
+        stage_in = input(constants.INP_STAGE).upper()
+        
+        if id_in.isdigit():
+            idnr = int(id_in)          
         else:
-            return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
+            print(constants.MSG_CLIENT_INVALID_CARDNUMBER)
+            return  
+
+        if stage_in in Stage.__members__:
+            stage = Stage[stage_in]
+        else:
+            print(constants.MSG_CLIENT_INVALID_STAGE)
+            return
 
         # construeer card met gewijzigde waarde voor stage, maak andere velden None om de originele waarde te behouden
         card = KBCard()

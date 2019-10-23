@@ -11,7 +11,7 @@ from pathlib import Path
 
 import constants
 import sql
-from kbcard import KBCard
+from kbcard import KBCard, Stage
 
 class ServerDatabase():
 
@@ -61,7 +61,7 @@ class ServerDatabase():
     # voeg nieuw card toe aan de database
     def insertCard(self, card):
         
-        self._execute(sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage))
+        self._execute(sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage.value))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBCREATE, self.cursor.lastrowid, constants.KB_PROMPT), end='')
 
     # lees card uit de database, returntype: KBCard
@@ -80,7 +80,7 @@ class ServerDatabase():
             card.project = result["project"]
             card.title = result["title"]
             card.description = result["description"]
-            card.stage = result["stage"]
+            card.stage = Stage(result["stage"])
 
             print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_RESULT, constants.KB_PROMPT), end='')
             return card
@@ -100,7 +100,7 @@ class ServerDatabase():
         if original is not None:
 
             # voer update statement uit, probeer waarde uit inkomende new_card te halen, of als de waarde daar None is gebruik de originele waarde
-            self._execute(sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage or original["stage"], new_card.id))
+            self._execute(sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage.value or Stage(original["stage"]), new_card.id))
         
         else:
             print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
