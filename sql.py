@@ -6,7 +6,7 @@
     Datum: 21 okt 2019
 """
 
-SQL_CREATE_CARDS_TABLE = """ CREATE TABLE IF NOT EXISTS Cards (
+CREATE_CARDS_TABLE = """ CREATE TABLE IF NOT EXISTS Cards (
                                 id INTEGER PRIMARY KEY, 
                                 team TEXT,
                                 project TEXT,
@@ -15,7 +15,7 @@ SQL_CREATE_CARDS_TABLE = """ CREATE TABLE IF NOT EXISTS Cards (
                                 stage INTEGER NOT NULL
                                 ); """
 
-SQL_INSERT_CARD = """ INSERT INTO Cards (
+INSERT_CARD = """ INSERT INTO Cards (
                                 team,
                                 project,
                                 title,
@@ -23,6 +23,15 @@ SQL_INSERT_CARD = """ INSERT INTO Cards (
                                 stage)
                                 VALUES (?,?,?,?,?); """
 
-SQL_READ_CARD = """ SELECT * from Cards WHERE id = ?; """
+READ_CARD = """ SELECT * from Cards WHERE id = ?; """
 
-SQL_DELETE_CARD = """ DELETE FROM Cards WHERE id = ?; """
+UPDATE_CARD = """ UPDATE Cards SET
+                                team = ?,
+                                project = ?,
+                                title = ?,
+                                description = ?,
+                                stage = ?
+                                WHERE id = ?; """
+
+
+DELETE_CARD = """ DELETE FROM Cards WHERE id = ?; """

@@ -55,10 +55,16 @@ class ServerReceiver(Thread):
                     print(constants.MSG_NOT_IMPLEMENTED)
                 else:
                     # roep de gekozen methode aan
-                    method(request[1])
+                    type_ok = method(request[1])
 
+                    if type_ok == False:
+                        print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')     
 
-    def create(self, payload):
+                    # en sluit de vebinding
+                    self.connection.close()
+
+    # mapping van interface methode naar database methode
+    def create(self, payload) -> bool:
         
         # controleer inkomende data
         if type(payload) == KBCard:
@@ -70,14 +76,13 @@ class ServerReceiver(Thread):
 
             # stuur reply
             self.connection.sendall(constants.KB_OK.encode())
+            return True
 
         else:
-            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+            return False
 
-        # sluit de vebinding
-        self.connection.close()
 
-    def read(self, payload):
+    def read(self, payload) -> bool:
         
         # controleer inkomende data
         if type(payload) == int:
@@ -85,20 +90,29 @@ class ServerReceiver(Thread):
             with ServerDatabase() as db:
                 card = db.readCard(payload)
                 
-                # stuur card als reply
-                self.connection.sendall(pickle.dumps(card))
+            # stuur card als reply
+            self.connection.sendall(pickle.dumps(card))
+            return True
+
         else:
-            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+            return False
 
-        # sluit de vebinding
-        self.connection.close()
+    def update(self, payload) -> bool:
+        
+        # controleer inkomende data
+        if type(payload) == KBCard:
 
-    def update(self):
-        print('update :)')
+            # update in database
+            with ServerDatabase() as db:
+                db.updateCard(payload)
+                db.commit()
 
-        # stuur reply, en sluit de vebinding
-        self.connection.sendall(constants.KB_OK.encode())
-        self.connection.close()
+            # stuur reply
+            self.connection.sendall(constants.KB_OK.encode())
+            return True
+
+        else:
+            return False
 
     def delete(self, payload):
 
@@ -112,17 +126,11 @@ class ServerReceiver(Thread):
             
             # stuur reply
             self.connection.sendall(constants.KB_OK.encode())
+            return True
 
         else:
-            print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')
+            return False
 
-
-        # sluit de vebinding
-        self.connection.close()
-
-    def listall(self):
+    def listall(self) -> bool:
         print('list all :)')
-
-        # stuur reply, en sluit de vebinding
-        
-        self.connection.close()
+        return True

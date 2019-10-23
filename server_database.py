@@ -28,7 +28,7 @@ class ServerDatabase():
             self.cursor = self.connection.cursor()
 
             # maak tabel als deze nog niet bestaat
-            self.cursor.execute(sql.SQL_CREATE_CARDS_TABLE)
+            self.cursor.execute(sql.CREATE_CARDS_TABLE)
 
         # exceptie afhandeling
         except sqlite3.Error as e:
@@ -61,7 +61,7 @@ class ServerDatabase():
     # voeg nieuw card toe aan de database
     def insertCard(self, card):
         
-        self._execute(sql.SQL_INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage))
+        self._execute(sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBCREATE, self.cursor.lastrowid, constants.KB_PROMPT), end='')
 
     # lees card uit de database, returntype: KBCard
@@ -69,7 +69,7 @@ class ServerDatabase():
         print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr))
         
         # voer sql SELECT uit en lees de eerste regel uit de response
-        self._execute(sql.SQL_READ_CARD, (idnr, ))
+        self._execute(sql.READ_CARD, (idnr, ))
         result = self.cursor.fetchone()
         
         if result is not None:
@@ -89,12 +89,27 @@ class ServerDatabase():
             print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
             return None
 
-    #TODO update
+    def updateCard(self, new_card: KBCard):
+        print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBUPDATE, new_card.id))
+
+        # lees item uit de db, zodat we altijd hetzelfe update statement kunnen gebruiken dat alle velden overschrijft
+        self._execute(sql.READ_CARD, (new_card.id, ))
+        original = self.cursor.fetchone()
+
+        # alleen bestaande items updaten
+        if original is not None:
+
+            # voer update statement uit, probeer waarde uit inkomende new_card te halen, of als de waarde daar None is gebruik de originele waarde
+            self._execute(sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage or original["stage"], new_card.id))
+        
+        else:
+            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
+            return None
 
     def deleteCard(self, idnr: int):
 
         # voer sql DELETE statement uit
-        self._execute(sql.SQL_DELETE_CARD, (idnr, ))
+        self._execute(sql.DELETE_CARD, (idnr, ))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBDELETE, idnr, constants.KB_PROMPT), end='')
 
 

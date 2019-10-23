@@ -60,7 +60,31 @@ class ClientPrompt(KBPrompt):
             return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
 
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("read", idnr))  # TODO vraag user input
+        dispatcher = ClientDispatcher(("read", idnr))
+        dispatcher.start()
+
+    def mcard(self):
+
+        # vraag de user om het card nummer en stage
+        id_in = input(constants.INP_CARDNUMBER)
+        stage_in = input(constants.INP_STAGE)
+        if id_in.isdigit() & stage_in.isdigit():
+            idnr = int(id_in)
+            stage = int(stage_in)
+        else:
+            return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
+
+        # construeer card met gewijzigde waarde voor stage, maak andere velden None om de originele waarde te behouden
+        card = KBCard()
+        card.id = idnr
+        card.stage = stage
+        card.title = None
+        card.team = None
+        card.project = None
+        card.description = None
+
+        # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
+        dispatcher = ClientDispatcher(("update", card))
         dispatcher.start()
 
     def dcard(self):
