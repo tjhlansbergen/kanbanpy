@@ -37,7 +37,7 @@ class ClientDispatcher(Thread):
         # verstuur naar server
         reply = self.sendData(dump)
 
-        # verwerkt antwoord
+        # verwerk antwoord
         self.receiveData(reply)
 
     def sendData(self, data: str):
@@ -76,6 +76,25 @@ class ClientDispatcher(Thread):
 
             # toon resultaat aan gebruiker
             print("{0}\n{1}".format(card.print(), constants.KB_PROMPT), end='')
+
+        elif self.request[0] == "listall":
+
+            # controleer de reactie van de server
+            cards = pickle.loads(data)
+            if type(cards) != list:
+                print("\n{0}\n{1}".format(constants.MSG_CLIENT_NOCARD, constants.KB_PROMPT), end='')
+                return
+
+            if type(cards[0]) != KBCard:
+                print("\n{0}\n{1}".format(constants.MSG_CLIENT_NOCARD, constants.KB_PROMPT), end='')
+                return
+
+            # toon resultaat aan gebruiker
+            print("\n")
+            for card in cards:
+                print(card.listprint())
+
+            print("\n{}".format(constants.KB_PROMPT), end='')
 
         else:   # create, update, delete
             # controleer de reactie van de server

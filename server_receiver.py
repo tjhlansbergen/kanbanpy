@@ -131,6 +131,17 @@ class ServerReceiver(Thread):
         else:
             return False
 
-    def listall(self) -> bool:
-        print('list all :)')
-        return True
+    def listall(self, payload) -> bool:
+
+        # controleer inkomende data
+        if payload is None:
+            # lees uit database
+            with ServerDatabase() as db:
+                cards = db.readAll()
+                
+            # stuur card als reply
+            self.connection.sendall(pickle.dumps(cards))
+            return True
+
+        else:
+            return False

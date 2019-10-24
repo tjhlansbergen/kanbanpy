@@ -45,6 +45,10 @@ class KBCard():
             "+-------------->\n"
             ])
 
+    # card weergave in lijst
+    def listprint(self) -> str:
+        return ' '.join([str(self.id), self.title, "->", self.stage.name])
+
     # functie voor het ophalen van gebruikers input voor de card
     def fillCard(self):
 

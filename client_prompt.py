@@ -106,6 +106,11 @@ class ClientPrompt(KBPrompt):
         dispatcher = ClientDispatcher(("delete", idnr))  # TODO vraag user input
         dispatcher.start()
 
+    def lcards(self):
+
+        dispatcher = ClientDispatcher(("listall", None))  # TODO vraag user input
+        dispatcher.start()
+
     # test methode voor het aanmaken en versturen van een card
     def test(self):
         card = KBCard()

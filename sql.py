@@ -25,6 +25,8 @@ INSERT_CARD = """ INSERT INTO Cards (
 
 READ_CARD = """ SELECT * from Cards WHERE id = ?; """
 
+READ_ALL = """ SELECT * from Cards; """
+
 UPDATE_CARD = """ UPDATE Cards SET
                                 team = ?,
                                 project = ?,

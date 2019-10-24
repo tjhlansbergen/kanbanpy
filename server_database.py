@@ -50,7 +50,10 @@ class ServerDatabase():
 
         # probeer sql statement uit te voeren
         try:
-            self.cursor.execute(sql, data)
+            if data is None:
+                self.cursor.execute(sql)
+            else:    
+                self.cursor.execute(sql, data)
             
         # exceptie afhandeling
         except sqlite3.Error as e: 
@@ -112,6 +115,36 @@ class ServerDatabase():
         self._execute(sql.DELETE_CARD, (idnr, ))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBDELETE, idnr, constants.KB_PROMPT), end='')
 
+    def readAll(self) -> list:
+
+        # voer sql SELECT statement uit
+        self._execute(sql.READ_ALL, None)
+        print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREADALL, constants.KB_PROMPT), end='')
+
+        # haal db regels op
+        rows = self.cursor.fetchall()
+
+        # check óf er resultaten zijn
+        if not rows:
+            return
+
+        # lege lijst voor het eindresultaat
+        result = list()
+
+        # maak card objecten van de db regels
+        for row in rows:
+            # construeer card uit database regel
+            card = KBCard()
+            card.id = row["id"]
+            card.team = row["team"]
+            card.project = row["project"]
+            card.title = row["title"]
+            card.description = row["description"]
+            card.stage = Stage(row["stage"])
+            # voeg toe aan eindresultaat
+            result.append(card)
+
+        return result
 
     # maakt wijzigingen definitief
     def commit(self):
