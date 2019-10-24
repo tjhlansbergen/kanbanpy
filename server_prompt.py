@@ -3,7 +3,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 21 okt 2019
+    Datum: 22 okt 2019
 """
 
 import config

@@ -3,7 +3,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 16 okt 2019
+    Datum: 21 okt 2019
 """
 
 from abc import ABC, abstractmethod # ten behoeve van abstracte klasse (Abstract Base Class)

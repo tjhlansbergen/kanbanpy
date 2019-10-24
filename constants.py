@@ -3,11 +3,11 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 15 okt 2019
+    Datum: 24 okt 2019
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.5"
+APP_VERSION = "v0.6"
 
 KB_OK = "succes"
 KB_NOT_OK = "error"

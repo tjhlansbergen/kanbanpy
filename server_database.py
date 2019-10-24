@@ -2,7 +2,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 19 okt 2019
+    Datum: 24 okt 2019
 """
 
 import datetime
@@ -13,11 +13,14 @@ import constants
 import sql
 from kbcard import KBCard, Stage
 
+
+# klasse voor communicatie met de applicatie database (sqlite3)
 class ServerDatabase():
 
     # bepaal het pad van de databasefile (als class-variable, want gedeeld door alle instances van de klasse)
     dbfile = Path(Path.home(), constants.DB_FILE)
 
+    # constructor
     def __init__(self):
 
         # probeer een connectie naar de db te maken, als deze nog niet bestaat wordt een nieuwe db-file aangemaakt

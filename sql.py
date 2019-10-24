@@ -3,7 +3,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 21 okt 2019
+    Datum: 24 okt 2019
 """
 
 CREATE_CARDS_TABLE = """ CREATE TABLE IF NOT EXISTS Cards (
@@ -23,10 +23,6 @@ INSERT_CARD = """ INSERT INTO Cards (
                                 stage)
                                 VALUES (?,?,?,?,?); """
 
-READ_CARD = """ SELECT * from Cards WHERE id = ?; """
-
-READ_ALL = """ SELECT * from Cards; """
-
 UPDATE_CARD = """ UPDATE Cards SET
                                 team = ?,
                                 project = ?,
@@ -34,6 +30,9 @@ UPDATE_CARD = """ UPDATE Cards SET
                                 description = ?,
                                 stage = ?
                                 WHERE id = ?; """
+                                
+READ_CARD = """ SELECT * from Cards WHERE id = ?; """
 
+READ_ALL = """ SELECT * from Cards; """
 
 DELETE_CARD = """ DELETE FROM Cards WHERE id = ?; """
