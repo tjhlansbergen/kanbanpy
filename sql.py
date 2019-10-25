@@ -31,8 +31,10 @@ UPDATE_CARD = """ UPDATE Cards SET
                                 stage = ?
                                 WHERE id = ?; """
                                 
-READ_CARD = """ SELECT * from Cards WHERE id = ?; """
-
-READ_ALL = """ SELECT * from Cards; """
+READ_CARD = """ SELECT * FROM Cards WHERE id = ?; """
 
 DELETE_CARD = """ DELETE FROM Cards WHERE id = ?; """
+
+SELECT_CARDS = """ SELECT * FROM Cards WHERE {0} = {1}; """
+
+SELECT_ALL = """ SELECT * FROM Cards; """

@@ -21,24 +21,25 @@ class ClientDispatcher(Thread):
     # override de constructor om parameter aan de klasse mee te kunnen geven
     def __init__(self, request: tuple):
         Thread.__init__(self)
-        self.request = request
+        self._request = request
 
-    # override de run methode die aangeroepen wordt wanneer de thread gestart wordt
+    # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
         # voorkom het versturen van bad request vanaf client-zijde
-        if type(self.request) != tuple or self.request[0] not in config.INTERFACE_COMMANDS:
+        if type(self._request) != tuple or self._request[0] not in config.INTERFACE_COMMANDS:
             print("{0}\n{1}".format(constants.ERR_SENDING_REQUEST, constants.KB_PROMPT), end='')
             return
 
         # creeer pickle als string
-        dump = pickle.dumps(self.request)
+        dump = pickle.dumps(self._request)
 
         # verstuur naar server
         reply = self.sendData(dump)
 
         # verwerk antwoord
         self.receiveData(reply)
+
 
     def sendData(self, data: str):
 
@@ -66,7 +67,7 @@ class ClientDispatcher(Thread):
             return
 
         # check soort request
-        if self.request[0] == "read":
+        if self._request[0] == "read":
 
             # controleer de reactie van de server
             card = pickle.loads(data)
@@ -77,7 +78,7 @@ class ClientDispatcher(Thread):
             # toon resultaat aan gebruiker
             print("{0}\n{1}".format(card.print(), constants.KB_PROMPT), end='')
 
-        elif self.request[0] == "listall":
+        elif self._request[0] == "select":
 
             # controleer de reactie van de server
             cards = pickle.loads(data)
@@ -88,6 +89,8 @@ class ClientDispatcher(Thread):
             if type(cards[0]) != KBCard:
                 print("\n{0}\n{1}".format(constants.MSG_CLIENT_NOCARD, constants.KB_PROMPT), end='')
                 return
+
+            self._result = cards
 
             # toon resultaat aan gebruiker
             print("\n")

@@ -35,7 +35,7 @@ class KBCard():
     # card weergave in terminal
     def print(self) -> str:
         return '\n'.join([
-            "\n+-------------->\n"
+            "\n\n+-------------->\n"
             "| Cardnumber: {}".format(self.id),
             "| Title: {}".format(self.title),
             "| Team: {}".format(self.team),
@@ -47,14 +47,14 @@ class KBCard():
 
     # card weergave in lijst
     def listprint(self) -> str:
-        return ' '.join([str(self.id), self.title, "->", self.stage.name])
+        return ' '.join([str(self.id), self.title, "->", self.stage.name, "(t:", self.team, "p:", self.project, ")"])
 
     # functie voor het ophalen van gebruikers input voor de card
     def fillCard(self):
 
         # vraag gebruiker om team en/of project
-        user_team = input(constants.INP_TEAM)
-        user_project = input(constants.INP_PROJECT)
+        user_team = input(constants.INP_TEAM).lower()
+        user_project = input(constants.INP_PROJECT).lower()
         while user_team == "" and user_project == "":
             print(constants.MSG_CLIENT_NO_TEAMORPROJECT)
             user_team = input(constants.INP_TEAM)

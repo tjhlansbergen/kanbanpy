@@ -12,4 +12,4 @@ MAX_DESCRIPTION_LENGTH = 250
 SERVER_HOSTNAME = ""
 SERVER_PORT = 65432
 
-INTERFACE_COMMANDS = ('create','read','update','delete','listall')
+INTERFACE_COMMANDS = ('create','read','update','delete','select')

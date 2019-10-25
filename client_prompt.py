@@ -31,6 +31,7 @@ class ClientPrompt(KBPrompt):
             "move card": "mcard",
             "delete card": "dcard",
             "list cards": "lcards",
+            "show board": "sboard",
             "help": "help",
             "exit": "exit"
         }
@@ -103,21 +104,28 @@ class ClientPrompt(KBPrompt):
             return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
 
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("delete", idnr))  # TODO vraag user input
+        dispatcher = ClientDispatcher(("delete", idnr))
         dispatcher.start()
 
     def lcards(self):
 
-        dispatcher = ClientDispatcher(("listall", None))  # TODO vraag user input
+        dispatcher = ClientDispatcher(("select", ("","")))
         dispatcher.start()
 
     # test methode voor het aanmaken en versturen van een card
-    def test(self):
-        card = KBCard()
-        card.title = "test_title"
-        card.team = "test team"
-        card.project = "test project"
-        card.description = "some descriptive text"
-        dispatcher = ClientDispatcher(("create", card))
-        dispatcher.start()
-        
+    def sboard(self):
+
+        # vraag gebruiker om team en/of project
+        user_team = input(constants.INP_TEAM).lower()
+        user_project = input(constants.INP_PROJECT).lower()
+        if user_team == "" and user_project == "":
+            print(constants.MSG_CLIENT_NO_TEAMORPROJECT)
+            return
+
+        # TEST
+        print("user_team: ", user_team)
+        print("user_project: ", user_project)
+        print(constants.MSG_NOT_IMPLEMENTED)
+
+        # TODO create and show board
+

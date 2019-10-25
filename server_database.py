@@ -60,7 +60,7 @@ class ServerDatabase():
             
         # exceptie afhandeling
         except sqlite3.Error as e: 
-            print("\n" + constants.ERR_DB_INSERTION)
+            print("\n" + constants.ERR_DB_INSERTION)    # TODO insertion?
             print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
 
 
@@ -72,7 +72,7 @@ class ServerDatabase():
 
     # lees card uit de database, returntype: KBCard
     def readCard(self, idnr: int) -> KBCard:
-        print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr))
+        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr, constants.KB_PROMPT), end='')
         
         # voer sql SELECT uit en lees de eerste regel uit de response
         self._execute(sql.READ_CARD, (idnr, ))
@@ -88,15 +88,14 @@ class ServerDatabase():
             card.description = result["description"]
             card.stage = Stage(result["stage"])
 
-            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_RESULT, constants.KB_PROMPT), end='')
             return card
 
         else:
-            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
+            print("{0}\n{1}".format(constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
             return None
 
     def updateCard(self, new_card: KBCard):
-        print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBUPDATE, new_card.id))
+        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBUPDATE, new_card.id, constants.KB_PROMPT), end='')
 
         # lees item uit de db, zodat we altijd hetzelfe update statement kunnen gebruiken dat alle velden overschrijft
         self._execute(sql.READ_CARD, (new_card.id, ))
@@ -109,7 +108,7 @@ class ServerDatabase():
             self._execute(sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage.value or Stage(original["stage"]), new_card.id))
         
         else:
-            print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
+            print("{0}\n{1}".format( constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
             return None
 
     def deleteCard(self, idnr: int):
@@ -118,18 +117,28 @@ class ServerDatabase():
         self._execute(sql.DELETE_CARD, (idnr, ))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBDELETE, idnr, constants.KB_PROMPT), end='')
 
-    def readAll(self) -> list:
+    def selectCards(self, query: tuple) -> list:
+
+        # controleer query
+        if len(query) != 2 or type(query[0]) != str or type(query[1]) != str:
+            return None
 
         # voer sql SELECT statement uit
-        self._execute(sql.READ_ALL, None)
-        print("{0} :: {1}\n{2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREADALL, constants.KB_PROMPT), end='')
+        if query[0] == "" and query[1] == "":
+            self._execute(sql.SELECT_ALL, None)
+        else:
+            self._execute(sql.SELECT_CARDS.format(query[0], query[1]), None)
 
         # haal db regels op
         rows = self.cursor.fetchall()
 
         # check óf er resultaten zijn
         if not rows:
-            return
+            print("{0}\n{1}".format( constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
+            return None
+
+        # gebruikers output
+        print("{0} :: {1}\n{2}{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBSELECT, len(rows), constants.KB_PROMPT), end='')
 
         # lege lijst voor het eindresultaat
         result = list()
@@ -148,6 +157,7 @@ class ServerDatabase():
             result.append(card)
 
         return result
+
 
     # maakt wijzigingen definitief
     def commit(self):

@@ -22,6 +22,7 @@ from server_database import ServerDatabase
 # ("read", <Int>)       - retourneert het card object met de corresponderende ID indien aanwezig, anders -1
 # ("update", <Card>)    - Indien Card object met corresponderend ID bestaat wordt deze bijgewerkt.
 # ("delete", <Int>)     - Verwijder Card object uit de database met corresponderend ID indien aanwezig.
+# ("select", <Tuple>)   - retourneert het resultaat van de query in de tupel of None bij geen resultaat
 #
 class ServerReceiver(Thread):
 
@@ -67,81 +68,81 @@ class ServerReceiver(Thread):
     def create(self, payload) -> bool:
         
         # controleer inkomende data
-        if type(payload) == KBCard:
-
-            # voeg toe aan database
-            with ServerDatabase() as db:
-                db.insertCard(payload)
-                db.commit()
-
-            # stuur reply
-            self.connection.sendall(constants.KB_OK.encode())
-            return True
-
-        else:
+        if type(payload) != KBCard:
             return False
+
+        # voeg toe aan database
+        with ServerDatabase() as db:
+            db.insertCard(payload)
+            db.commit()
+
+        # stuur reply
+        self.connection.sendall(constants.KB_OK.encode())
+        return True
+
+            
 
 
     def read(self, payload) -> bool:
         
         # controleer inkomende data
-        if type(payload) == int:
-            # lees uit database
-            with ServerDatabase() as db:
-                card = db.readCard(payload)
-                
-            # stuur card als reply
-            self.connection.sendall(pickle.dumps(card))
-            return True
-
-        else:
+        if type(payload) != int:
             return False
+
+        # lees uit database
+        with ServerDatabase() as db:
+            card = db.readCard(payload)
+            
+        # stuur card als reply
+        self.connection.sendall(pickle.dumps(card))
+        return True
+
 
     def update(self, payload) -> bool:
         
         # controleer inkomende data
-        if type(payload) == KBCard:
-
-            # update in database
-            with ServerDatabase() as db:
-                db.updateCard(payload)
-                db.commit()
-
-            # stuur reply
-            self.connection.sendall(constants.KB_OK.encode())
-            return True
-
-        else:
+        if type(payload) != KBCard:
             return False
+
+        # update in database
+        with ServerDatabase() as db:
+            db.updateCard(payload)
+            db.commit()
+
+        # stuur reply
+        self.connection.sendall(constants.KB_OK.encode())
+        return True
+
 
     def delete(self, payload):
 
         # controleer inkomende data
-        if type(payload) == int:
-
-            # verwijder uit database
-            with ServerDatabase() as db:
-                db.deleteCard(payload)
-                db.commit()
-            
-            # stuur reply
-            self.connection.sendall(constants.KB_OK.encode())
-            return True
-
-        else:
+        if type(payload) != int:
             return False
 
-    def listall(self, payload) -> bool:
+        # verwijder uit database
+        with ServerDatabase() as db:
+            db.deleteCard(payload)
+            db.commit()
+        
+        # stuur reply
+        self.connection.sendall(constants.KB_OK.encode())
+        return True
+
+    def select(self, payload) -> bool:
 
         # controleer inkomende data
-        if payload is None:
-            # lees uit database
-            with ServerDatabase() as db:
-                cards = db.readAll()
-                
-            # stuur card als reply
-            self.connection.sendall(pickle.dumps(cards))
-            return True
-
-        else:
+        if type(payload) != tuple:
             return False
+        if len(payload) != 2:
+            return False
+        if type(payload[0]) != str or type(payload[1]) != str:
+            return False
+
+        # lees uit database
+        with ServerDatabase() as db:
+            cards = db.selectCards(payload)
+            
+        # stuur card als reply
+        self.connection.sendall(pickle.dumps(cards))
+        return True
