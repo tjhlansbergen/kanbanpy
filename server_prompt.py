@@ -30,7 +30,7 @@ class ServerPrompt(KBPrompt):
         super().__init__()
 
         # en de commando's specifiek voor deze implementatie
-        self.commands = {
+        self._commands = {
             "help": "help",
             "exit": "exit"
         }

@@ -15,20 +15,20 @@ class KBPrompt(ABC):
 
     # constructor
     def __init__(self):
-        self.user_exit = False
-        self.commands = {}
+        self._user_exit = False
+        self._commands = {}
     
     # hoofd methode voor het verwerken van commando's
     def show(self):
 
         # menu loop
-        while self.user_exit == False:
+        while self._user_exit == False:
 
             # toon prompt
             user_in = input(constants.KB_PROMPT)
             
             # verifier de input, en voer uit         
-            method = getattr(self, self.commands.get(user_in, "invalid"), "not_implemented") 
+            method = getattr(self, self._commands.get(user_in, "invalid"), "not_implemented") 
             if(method == "not_implemented"):
                 print(constants.MSG_NOT_IMPLEMENTED)
             else:
@@ -40,6 +40,6 @@ class KBPrompt(ABC):
         print(constants.MSG_UNKNOWN_COMMAND)
 
     def exit(self):
-        self.user_exit = True
+        self._user_exit = True
         
 

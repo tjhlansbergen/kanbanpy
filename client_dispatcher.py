@@ -57,7 +57,11 @@ class ConsoleDispatcher(ClientDispatcher):
             return
 
         # creeer pickle als string
-        dump = pickle.dumps(self._request)
+        try:
+            dump = pickle.dumps(self._request)
+        except pickle.PickleError as e:
+            print("{0}:{1}\n{2}".format(constants.ERR_SENDING_REQUEST, e, constants.KB_PROMPT), end='')
+            return
 
         # verstuur naar server
         reply = self.sendData(dump)
@@ -126,7 +130,10 @@ class BoardDispatcher(ClientDispatcher):
         if self._projectname == "":     # teambord
             
             # maak query en pickle
-            dump = pickle.dumps(("select", ("team", '"{0}"'.format(self._teamname))))   # omvat teamname in quotes
+            try:
+                dump = pickle.dumps(("select", ("team", '"{0}"'.format(self._teamname))))   # omvat teamname in quotes
+            except pickle.PickleError:
+                return
 
             # verzend request, wacht op antwoord
             reply = self.sendData(dump)
@@ -137,7 +144,10 @@ class BoardDispatcher(ClientDispatcher):
         elif self._teamname == "":      # projectbord
             
             # maak query en pickle
-            dump = pickle.dumps(("select", ("project", '"{0}"'.format(self._projectname)))) # omvat projectname in quotes
+            try:
+                dump = pickle.dumps(("select", ("project", '"{0}"'.format(self._projectname)))) # omvat projectname in quotes
+            except pickle.PickleError:
+                return
 
             # verzend request, wacht op antwoord
             reply = self.sendData(dump)

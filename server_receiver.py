@@ -28,16 +28,16 @@ class ServerReceiver(Thread):
 
     def __init__(self, connection, address):
         Thread.__init__(self)
-        self.address = address
-        self.connection = connection
+        self._address = address
+        self._connection = connection
     
     # override de run methode die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
-                print("\n{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_INCOMING, self.address))
+                print("\n{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_INCOMING, self._address))
 
                 # ontvang de data
-                data = self.connection.recv(1024)
+                data = self._connection.recv(1024)
                 print("{0} :: {1} {2}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), len(data), constants.MSG_SERVER_DATARECEIVED))
 
                 # data deserializeren
@@ -47,7 +47,7 @@ class ServerReceiver(Thread):
                 if type(request) != tuple or request[0] not in constants.INTERFACE_COMMANDS:
 
                     # stuur géén reply, sluit de vebinding en stop uitvoering
-                    self.connection.close()
+                    self._connection.close()
                     return
     
                 # selecteer juiste methode voor verdere verwerking
@@ -62,7 +62,7 @@ class ServerReceiver(Thread):
                         print("{0}\n{1}".format(constants.MSG_SERVER_INCORRECTTYPE, constants.KB_PROMPT), end='')     
 
                     # en sluit de vebinding
-                    self.connection.close()
+                    self._connection.close()
 
     # mapping van interface methode naar database methode
     def create(self, payload) -> bool:
@@ -77,7 +77,7 @@ class ServerReceiver(Thread):
             db.commit()
 
         # stuur reply
-        self.connection.sendall(constants.KB_OK.encode())
+        self._connection.sendall(constants.KB_OK.encode())
         return True
 
             
@@ -94,7 +94,7 @@ class ServerReceiver(Thread):
             card = db.readCard(payload)
             
         # stuur card als reply
-        self.connection.sendall(pickle.dumps(card))
+        self._connection.sendall(pickle.dumps(card))
         return True
 
 
@@ -110,7 +110,7 @@ class ServerReceiver(Thread):
             db.commit()
 
         # stuur reply
-        self.connection.sendall(constants.KB_OK.encode())
+        self._connection.sendall(constants.KB_OK.encode())
         return True
 
 
@@ -126,7 +126,7 @@ class ServerReceiver(Thread):
             db.commit()
         
         # stuur reply
-        self.connection.sendall(constants.KB_OK.encode())
+        self._connection.sendall(constants.KB_OK.encode())
         return True
 
     def select(self, payload) -> bool:
@@ -144,5 +144,5 @@ class ServerReceiver(Thread):
             cards = db.selectCards(payload)
             
         # stuur card als reply
-        self.connection.sendall(pickle.dumps(cards))
+        self._connection.sendall(pickle.dumps(cards))
         return True

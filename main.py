@@ -48,7 +48,7 @@ class kanbanpy:
             clientprompt = ClientPrompt()
             clientprompt.show()
 
-
+# start uitvoer van main.py script, creeer applicatie-klasse en start main functie
 if __name__ == "__main__":
     app = kanbanpy()
     app.main()

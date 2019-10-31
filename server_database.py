@@ -18,7 +18,7 @@ from kbcard import KBCard, Stage
 class ServerDatabase():
 
     # bepaal het pad van de databasefile (als class-variable, want gedeeld door alle instances van de klasse)
-    dbfile = Path(Path.home(), constants.DB_FILE)
+    _dbfile = Path(Path.home(), constants.DB_FILE)
 
     # constructor
     def __init__(self):
@@ -26,12 +26,12 @@ class ServerDatabase():
         # probeer een connectie naar de db te maken, als deze nog niet bestaat wordt een nieuwe db-file aangemaakt
         try:
             # verbind naar database
-            self.connection = sqlite3.connect(ServerDatabase.dbfile)
-            self.connection.row_factory = sqlite3.Row # maakt het mogelijk velden uit db regels op naam te benaderen
-            self.cursor = self.connection.cursor()
+            self._connection = sqlite3.connect(ServerDatabase._dbfile)
+            self._connection.row_factory = sqlite3.Row # maakt het mogelijk velden uit db regels op naam te benaderen
+            self._cursor = self._connection.cursor()
 
             # maak tabel als deze nog niet bestaat
-            self.cursor.execute(sql.CREATE_CARDS_TABLE)
+            self._cursor.execute(sql.CREATE_CARDS_TABLE)
 
         # exceptie afhandeling
         except sqlite3.Error as e:
@@ -46,17 +46,17 @@ class ServerDatabase():
 
     # sluit de verbinding automatisch wanneer database geinstantieerd was met 'with ServerDB'
     def __exit__(self, ext_type, exc_value, traceback):
-        self.cursor.close()
-        self.connection.close()
+        self._cursor.close()
+        self._connection.close()
 
     def _execute(self, sql: str, data: tuple):
 
         # probeer sql statement uit te voeren
         try:
             if data is None:
-                self.cursor.execute(sql)
+                self._cursor.execute(sql)
             else:    
-                self.cursor.execute(sql, data)
+                self._cursor.execute(sql, data)
             
         # exceptie afhandeling
         except sqlite3.Error as e: 
@@ -68,7 +68,7 @@ class ServerDatabase():
     def insertCard(self, card):
         
         self._execute(sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage.value))
-        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBCREATE, self.cursor.lastrowid, constants.KB_PROMPT), end='')
+        print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBCREATE, self._cursor.lastrowid, constants.KB_PROMPT), end='')
 
     # lees card uit de database, returntype: KBCard
     def readCard(self, idnr: int) -> KBCard:
@@ -76,7 +76,7 @@ class ServerDatabase():
         
         # voer sql SELECT uit en lees de eerste regel uit de response
         self._execute(sql.READ_CARD, (idnr, ))
-        result = self.cursor.fetchone()
+        result = self._cursor.fetchone()
         
         if result is not None:
             # construeer card uit database regel
@@ -99,7 +99,7 @@ class ServerDatabase():
 
         # lees item uit de db, zodat we altijd hetzelfe update statement kunnen gebruiken dat alle velden overschrijft
         self._execute(sql.READ_CARD, (new_card.id, ))
-        original = self.cursor.fetchone()
+        original = self._cursor.fetchone()
 
         # alleen bestaande items updaten
         if original is not None:
@@ -130,7 +130,7 @@ class ServerDatabase():
             self._execute(sql.SELECT_CARDS.format(query[0], query[1]), None)
 
         # haal db regels op
-        rows = self.cursor.fetchall()
+        rows = self._cursor.fetchall()
 
         # check óf er resultaten zijn
         if not rows:
@@ -161,4 +161,4 @@ class ServerDatabase():
 
     # maakt wijzigingen definitief
     def commit(self):
-        self.connection.commit()
+        self._connection.commit()

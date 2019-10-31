@@ -24,7 +24,7 @@ class ClientPrompt(KBPrompt):
         super().__init__()
 
         # en de commando's specifiek voor deze implementatie
-        self.commands = {
+        self._commands = {
             "test": "test",
             "create card": "ccard",
             "read card": "rcard",
