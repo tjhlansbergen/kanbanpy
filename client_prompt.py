@@ -9,7 +9,7 @@
 import pickle
 
 import constants
-from client_dispatcher import ClientDispatcher
+from client_dispatcher import ConsoleDispatcher, BoardDispatcher
 from kbcard import KBCard, Stage
 from kbprompt import KBPrompt
 
@@ -46,7 +46,7 @@ class ClientPrompt(KBPrompt):
         card.fillCard()
 
         # start de dispatcher (op zijn eigen thread), en verzend de card naar de server
-        dispatcher = ClientDispatcher(("create", card))
+        dispatcher = ConsoleDispatcher(("create", card))
         dispatcher.start()
 
     def rcard(self):
@@ -60,7 +60,7 @@ class ClientPrompt(KBPrompt):
             return
             
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("read", idnr))
+        dispatcher = ConsoleDispatcher(("read", idnr))
         dispatcher.start()
 
     def mcard(self):
@@ -91,7 +91,7 @@ class ClientPrompt(KBPrompt):
         card.description = None
 
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("update", card))
+        dispatcher = ConsoleDispatcher(("update", card))
         dispatcher.start()
 
     def dcard(self):
@@ -104,12 +104,12 @@ class ClientPrompt(KBPrompt):
             return  # faal zonder feedback, de gebruiker kan zelf ook wel bedenken dat hij hier een getal in moet vullen
 
         # start de dispatcher (op zijn eigen thread), en verzend het verzoek naar de server
-        dispatcher = ClientDispatcher(("delete", idnr))
+        dispatcher = ConsoleDispatcher(("delete", idnr))
         dispatcher.start()
 
     def lcards(self):
 
-        dispatcher = ClientDispatcher(("select", ("","")))
+        dispatcher = ConsoleDispatcher(("select", ("","")))
         dispatcher.start()
 
     # test methode voor het aanmaken en versturen van een card
@@ -127,5 +127,7 @@ class ClientPrompt(KBPrompt):
         print("user_project: ", user_project)
         print(constants.MSG_NOT_IMPLEMENTED)
 
-        # TODO create and show board
+
+
+
 

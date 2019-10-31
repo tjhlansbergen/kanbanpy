@@ -44,7 +44,7 @@ class ServerReceiver(Thread):
                 request = pickle.loads(data)
 
                 # controleer inkomende data
-                if type(request) != tuple or request[0] not in config.INTERFACE_COMMANDS:
+                if type(request) != tuple or request[0] not in constants.INTERFACE_COMMANDS:
 
                     # stuur géén reply, sluit de vebinding en stop uitvoering
                     self.connection.close()

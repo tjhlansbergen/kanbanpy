@@ -12,13 +12,11 @@ import constants
 
 # enum voor de verschillende statussen die card kunnen hebben
 class Stage(Enum):
-    HOLD = 1
-    BACKLOG = 2
+    BACKLOG = 1
+    TODO = 2
     DOING = 3
-    TESTING = 4
-    DOCUMENTING = 5
-    DELIVERING = 6
-    DONE = 7
+    DONE = 4
+
 
 # klasse voor het object Card, de kaartjes op het kanbanbord
 class KBCard():
@@ -32,7 +30,7 @@ class KBCard():
         self.description = ""
         self.stage = Stage.BACKLOG
 
-    # card weergave in terminal
+    # methodes voor het tonen van KBCard objecten op de commandline
     def print(self) -> str:
         return '\n'.join([
             "\n\n+-------------->\n"

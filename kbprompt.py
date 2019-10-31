@@ -41,4 +41,5 @@ class KBPrompt(ABC):
 
     def exit(self):
         self.user_exit = True
+        
 

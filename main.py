@@ -8,6 +8,7 @@
 
 import os
 
+import config
 import constants
 from client_prompt import ClientPrompt
 from server_listener import ServerListener
@@ -20,6 +21,9 @@ class kanbanpy:
     # hoofdfunctie, entrypoint van de applicatie
     def main(self):
 
+        # probeer configuratiebestand uit te lezen
+        config.loadConfig(os.path.join(os.path.dirname(os.path.realpath(__file__)), config.CONFIG_FILE))
+        
         # keuze client/server
         context = ''
         while (context == ''):

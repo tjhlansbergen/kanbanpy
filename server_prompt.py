@@ -31,7 +31,6 @@ class ServerPrompt(KBPrompt):
 
         # en de commando's specifiek voor deze implementatie
         self.commands = {
-            "test": "test",
             "help": "help",
             "exit": "exit"
         }
@@ -40,7 +39,4 @@ class ServerPrompt(KBPrompt):
     def help(self):
         print(constants.MSG_SERVER_HELP)
 
-    def test(self):
-        with ServerDatabase() as db:
-            db.selectCards()
 

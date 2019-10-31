@@ -19,28 +19,9 @@ from kbcard import KBCard
 class ClientDispatcher(Thread):
 
     # override de constructor om parameter aan de klasse mee te kunnen geven
-    def __init__(self, request: tuple):
+    def __init__(self):
         Thread.__init__(self)
-        self._request = request
-
-    # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
-    def run(self):
-
-        # voorkom het versturen van bad request vanaf client-zijde
-        if type(self._request) != tuple or self._request[0] not in config.INTERFACE_COMMANDS:
-            print("{0}\n{1}".format(constants.ERR_SENDING_REQUEST, constants.KB_PROMPT), end='')
-            return
-
-        # creeer pickle als string
-        dump = pickle.dumps(self._request)
-
-        # verstuur naar server
-        reply = self.sendData(dump)
-
-        # verwerk antwoord
-        self.receiveData(reply)
-
-
+        
     def sendData(self, data: str):
 
         # return variabele
@@ -59,6 +40,30 @@ class ClientDispatcher(Thread):
             print("{0}\n{1}".format(e, constants.KB_PROMPT), end='')
 
         return reply
+
+class ConsoleDispatcher(ClientDispatcher):
+
+    # constructor
+    def __init__(self, request: tuple):
+        ClientDispatcher.__init__(self)
+        self._request = request
+
+        # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
+    def run(self):
+
+        # voorkom het versturen van bad request vanaf client-zijde
+        if type(self._request) != tuple or self._request[0] not in constants.INTERFACE_COMMANDS:
+            print("{0}\n{1}".format(constants.ERR_SENDING_REQUEST, constants.KB_PROMPT), end='')
+            return
+
+        # creeer pickle als string
+        dump = pickle.dumps(self._request)
+
+        # verstuur naar server
+        reply = self.sendData(dump)
+
+        # verwerk antwoord
+        self.receiveData(reply)
 
     def receiveData(self, data):
 
@@ -105,4 +110,46 @@ class ClientDispatcher(Thread):
                 print("\n{0}\n{1}".format(constants.ERR_RECEIVING_REQUEST, constants.KB_PROMPT), end='')
 
 
+# subklasse van ClientDispatcher specifiek voor het tonen van een kanbanbord
+class BoardDispatcher(ClientDispatcher):
+    
+    # constructor
+    def __init(self, teamname: str, projectname: str):
+        ClientDispatcher.__init__(self)
+        self._teamname = teamname
+        self._projectname = projectname
 
+    # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
+    def run(self):
+
+        # bepaal type bord
+        if self._projectname == "":     # teambord
+            
+            # maak query en pickle
+            dump = pickle.dumps(("select", ("team", '"{0}"'.format(self._teamname))))   # omvat teamname in quotes
+
+            # verzend request, wacht op antwoord
+            reply = self.sendData(dump)
+
+            # verwerk antwoord
+            self.receiveData(reply)
+
+        elif self._teamname == "":      # projectbord
+            
+            # maak query en pickle
+            dump = pickle.dumps(("select", ("project", '"{0}"'.format(self._projectname)))) # omvat projectname in quotes
+
+            # verzend request, wacht op antwoord
+            reply = self.sendData(dump)
+
+            # verwerk antwoord
+            self.receiveData(reply)
+
+        else:     
+            pass                      # teamprojectbord
+            # TODO
+
+    # override voor bord specifieke afhandeling
+    def receiveData(self, data):
+        pass
+        # TODO

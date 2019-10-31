@@ -14,6 +14,7 @@ KB_NOT_OK = "error"
 KB_PROMPT = ">> "
 
 DB_FILE = ".kanbanpy.db"
+INTERFACE_COMMANDS = ('create','read','update','delete','select')
 
 INP_SERVER_CLIENT = "Run as server or client (s/c)? "
 INP_TEAM = "Specify a team name, or leave blank: "
