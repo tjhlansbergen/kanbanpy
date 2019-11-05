@@ -10,6 +10,7 @@ import pickle
 
 import constants
 from client_dispatcher import ConsoleDispatcher, BoardDispatcher
+from kbboards import ProjectBoard, TeamBoard, TeamProjectBoard
 from kbcard import KBCard, Stage
 from kbprompt import KBPrompt
 
@@ -112,7 +113,7 @@ class ClientPrompt(KBPrompt):
         dispatcher = ConsoleDispatcher(("select", ("","")))
         dispatcher.start()
 
-    # test methode voor het aanmaken en versturen van een card
+
     def sboard(self):
 
         # vraag gebruiker om team en/of project
@@ -122,11 +123,27 @@ class ClientPrompt(KBPrompt):
             print(constants.MSG_CLIENT_NO_TEAMORPROJECT)
             return
 
-        # TEST
-        print("user_team: ", user_team)
-        print("user_project: ", user_project)
-        print(constants.MSG_NOT_IMPLEMENTED)
+        board = None
 
+        # check type board
+        if user_team == "":
+
+            # project board
+            board = ProjectBoard(user_project)
+
+        elif user_project == "":
+
+            # team board
+            board = TeamBoard(user_team)
+
+        else:
+
+            # TeamProjectBoard
+            board = TeamProjectBoard(user_team, user_project)
+
+        if board is not None:
+            dispatcher = BoardDispatcher(board)
+            dispatcher.start()
 
 
 

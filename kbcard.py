@@ -30,6 +30,14 @@ class KBCard():
         self.description = ""
         self.stage = Stage.BACKLOG
 
+    # override compare functie, zodat card vergeleken worden id ipv hash
+    def __eq__(self, other): 
+        if not isinstance(other, KBCard):
+            # alleen tegen hetzelfde type verglijken
+            return NotImplemented
+        # vergelijk op ID
+        return self.id == other.id
+
     # methodes voor het tonen van KBCard objecten op de commandline
     def print(self) -> str:
         return '\n'.join([

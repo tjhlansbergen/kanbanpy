@@ -21,9 +21,9 @@ class ServerPrompt(KBPrompt):
     def __init__(self):
 
         # start de listener
-        listener = ServerListener() # maak een deamon thread van listener zodat deze actief blijf maar stopt als de applicatie stopt
-        listener.daemon = True  
-        listener.start()
+        _listener = ServerListener() # maak een deamon thread van listener zodat deze actief blijf maar stopt als de applicatie stopt
+        _listener.daemon = True  
+        _listener.start()
         print(constants.MSG_SERVER_LISTENING, config.SERVER_PORT)
 
         # initieer de super klasse

@@ -45,10 +45,10 @@ class ConsoleDispatcher(ClientDispatcher):
 
     # constructor
     def __init__(self, request: tuple):
-        ClientDispatcher.__init__(self)
+        super().__init__()
         self._request = request
 
-        # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
+    # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
         # voorkom het versturen van bad request vanaf client-zijde
@@ -118,48 +118,20 @@ class ConsoleDispatcher(ClientDispatcher):
 class BoardDispatcher(ClientDispatcher):
     
     # constructor
-    def __init(self, teamname: str, projectname: str):
-        ClientDispatcher.__init__(self)
-        self._teamname = teamname
-        self._projectname = projectname
+    def __init__(self, board):
+        super().__init__()
+        self._board = board
 
     # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
 
-        # bepaal type bord
-        if self._projectname == "":     # teambord
-            
-            # maak query en pickle
-            try:
-                dump = pickle.dumps(("select", ("team", '"{0}"'.format(self._teamname))))   # omvat teamname in quotes
-            except pickle.PickleError:
-                return
-
-            # verzend request, wacht op antwoord
-            reply = self.sendData(dump)
+        # haal requests op voor het board en stuur deze naar de server, geef reply terug aan het board
+        for request in self._board.getRequests():
+            # stuur request
+            reply = self.sendData(request)
 
             # verwerk antwoord
-            self.receiveData(reply)
+            self._board.set_cards(reply)
 
-        elif self._teamname == "":      # projectbord
-            
-            # maak query en pickle
-            try:
-                dump = pickle.dumps(("select", ("project", '"{0}"'.format(self._projectname)))) # omvat projectname in quotes
-            except pickle.PickleError:
-                return
-
-            # verzend request, wacht op antwoord
-            reply = self.sendData(dump)
-
-            # verwerk antwoord
-            self.receiveData(reply)
-
-        else:     
-            pass                      # teamprojectbord
-            # TODO
-
-    # override voor bord specifieke afhandeling
-    def receiveData(self, data):
-        pass
-        # TODO
+        # toon board
+        self._board.create()
