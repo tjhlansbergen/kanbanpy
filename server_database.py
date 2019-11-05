@@ -10,7 +10,7 @@ import sqlite3
 from pathlib import Path
 
 import constants
-import sql
+import kb_sql
 from kbcard import KBCard, Stage
 
 
@@ -31,7 +31,7 @@ class ServerDatabase():
             self._cursor = self._connection.cursor()
 
             # maak tabel als deze nog niet bestaat
-            self._cursor.execute(sql.CREATE_CARDS_TABLE)
+            self._cursor.execute(kb_sql.CREATE_CARDS_TABLE)
 
         # exceptie afhandeling
         except sqlite3.Error as e:
@@ -67,7 +67,7 @@ class ServerDatabase():
     # voeg nieuw card toe aan de database
     def insertCard(self, card):
         
-        self._execute(sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage.value))
+        self._execute(kb_sql.INSERT_CARD, (card.team, card.project, card.title, card.description, card.stage.value))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBCREATE, self._cursor.lastrowid, constants.KB_PROMPT), end='')
 
     # lees card uit de database, returntype: KBCard
@@ -75,7 +75,7 @@ class ServerDatabase():
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBREAD, idnr, constants.KB_PROMPT), end='')
         
         # voer sql SELECT uit en lees de eerste regel uit de response
-        self._execute(sql.READ_CARD, (idnr, ))
+        self._execute(kb_sql.READ_CARD, (idnr, ))
         result = self._cursor.fetchone()
         
         if result is not None:
@@ -98,14 +98,14 @@ class ServerDatabase():
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBUPDATE, new_card.id, constants.KB_PROMPT), end='')
 
         # lees item uit de db, zodat we altijd hetzelfe update statement kunnen gebruiken dat alle velden overschrijft
-        self._execute(sql.READ_CARD, (new_card.id, ))
+        self._execute(kb_sql.READ_CARD, (new_card.id, ))
         original = self._cursor.fetchone()
 
         # alleen bestaande items updaten
         if original is not None:
 
             # voer update statement uit, probeer waarde uit inkomende new_card te halen, of als de waarde daar None is gebruik de originele waarde
-            self._execute(sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage.value or Stage(original["stage"]), new_card.id))
+            self._execute(kb_sql.UPDATE_CARD, (new_card.team or original["team"], new_card.project or original["project"], new_card.title or original["title"], new_card.description or original["description"], new_card.stage.value or Stage(original["stage"]), new_card.id))
         
         else:
             print("{0}\n{1}".format( constants.MSG_SERVER_NORESULT, constants.KB_PROMPT), end='')
@@ -114,7 +114,7 @@ class ServerDatabase():
     def deleteCard(self, idnr: int):
 
         # voer sql DELETE statement uit
-        self._execute(sql.DELETE_CARD, (idnr, ))
+        self._execute(kb_sql.DELETE_CARD, (idnr, ))
         print("{0} :: {1} {2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBDELETE, idnr, constants.KB_PROMPT), end='')
 
     def selectCards(self, query: tuple) -> list:
@@ -125,9 +125,9 @@ class ServerDatabase():
 
         # voer sql SELECT statement uit
         if query[0] == "" and query[1] == "":
-            self._execute(sql.SELECT_ALL, None)
+            self._execute(kb_sql.SELECT_ALL, None)
         else:
-            self._execute(sql.SELECT_CARDS.format(query[0], query[1]), None)
+            self._execute(kb_sql.SELECT_CARDS.format(query[0], query[1]), None)
 
         # haal db regels op
         rows = self._cursor.fetchall()
@@ -138,7 +138,7 @@ class ServerDatabase():
             return None
 
         # gebruikers output
-        print("{0} :: {1}\n{2}{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBSELECT, len(rows), constants.KB_PROMPT), end='')
+        print("{0} :: {1}{2}\n{3}".format(datetime.datetime.now().strftime("%d %b %H:%M:%S"), constants.MSG_SERVER_DBSELECT, len(rows), constants.KB_PROMPT), end='')
 
         # lege lijst voor het eindresultaat
         result = list()

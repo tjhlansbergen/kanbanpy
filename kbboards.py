@@ -1,14 +1,18 @@
 from abc import ABC, abstractmethod # ten behoeve van abstracte klasse (Abstract Base Class)
 import pickle
+from string import Template
 
 import constants
+import kb_html
+import kb_css
 from kbcard import KBCard, Stage
 
 class Board(ABC):
 
     # constructor
     def __init__(self):
-        self._cards = []    
+        self._cards = []   
+         
 
     def set_cards(self, data):
         
@@ -33,10 +37,17 @@ class Board(ABC):
 
 
 
-    def create(self):
-        print("Cards: ", len(self._cards)) 
-        for card in self._cards:
-            print(card.listprint())
+    def create(self) -> str:
+        
+        # verzamel cards per stage
+        backlog = [card.htmlprint() for card in self._cards if card.stage == Stage.BACKLOG]
+        todo = [card.htmlprint() for card in self._cards if card.stage == Stage.TODO]
+        doing = [card.htmlprint() for card in self._cards if card.stage == Stage.DOING]
+        done = [card.htmlprint() for card in self._cards if card.stage == Stage.DONE]
+
+        # genereer HTML pagina van template en cards en retourneer
+        html = Template(kb_html.SKELETON)
+        return html.safe_substitute(CSS=kb_css.STYLES, BACKLOG="\n".join(backlog), TODO="\n".join(todo), DOING="\n".join(doing), DONE="\n".join(done))
 
 
 class TeamBoard(Board):

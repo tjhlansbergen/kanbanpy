@@ -1,5 +1,5 @@
 
-""" sql.py: SQL statements voor de kanbanpy client applicatie
+""" kb_sql.py: SQL statements voor de kanbanpy client applicatie
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python

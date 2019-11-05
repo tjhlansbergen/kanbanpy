@@ -11,7 +11,9 @@ import configparser
 MAX_TITLE_LENGTH = 20
 MAX_DESCRIPTION_LENGTH = 250
 
+HTML_FILE = "kanbanpy.html"
 CONFIG_FILE = "kanbanpy.config"
+
 # onderstaande instellingen kunnen overschreven worden in een config bestand met naam zoals hierboven geconfigureerd
 SERVER_HOSTNAME = ""
 SERVER_PORT = 65432

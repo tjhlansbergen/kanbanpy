@@ -6,9 +6,12 @@
     Datum: 24 okt 2019
 """
 
+import os
 import pickle
 import socket
+import tempfile
 from threading import Thread 
+import webbrowser
 
 import config
 import constants
@@ -118,9 +121,10 @@ class ConsoleDispatcher(ClientDispatcher):
 class BoardDispatcher(ClientDispatcher):
     
     # constructor
-    def __init__(self, board):
+    def __init__(self, board, open_browser: bool = False):
         super().__init__()
         self._board = board
+        self._open = open_browser
 
     # override de run methode van Thread die aangeroepen wordt wanneer de thread gestart wordt
     def run(self):
@@ -134,4 +138,20 @@ class BoardDispatcher(ClientDispatcher):
             self._board.set_cards(reply)
 
         # toon board
-        self._board.create()
+        html = self._board.create()
+
+        # write HTML naar bestand, met with zodat bestand automatisch gesloten wordt na schrijven
+        filepath = os.path.join(tempfile.gettempdir(), config.HTML_FILE)
+        with open(filepath, "w") as file:
+            try:
+                file.write(html)
+            except IOError as e:
+                print("{0}:{1}\n{2}".format(constants.ERR_SENDING_REQUEST, e, constants.KB_PROMPT), end='')
+                return
+
+        # open browser
+        if self._open == True:
+            webbrowser.open_new_tab(filepath)
+
+
+    # TODO refresh board

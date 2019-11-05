@@ -6,9 +6,11 @@
 """
 
 from enum import Enum
+from string import Template
 
 import config
 import constants
+import kb_html
 
 # enum voor de verschillende statussen die card kunnen hebben
 class Stage(Enum):
@@ -29,8 +31,9 @@ class KBCard():
         self.title = ""
         self.description = ""
         self.stage = Stage.BACKLOG
+        # TODO PRIO
 
-    # override compare functie, zodat card vergeleken worden id ipv hash
+    # override compare functie, zodat card vergeleken worden aan de hand van id ipv hash
     def __eq__(self, other): 
         if not isinstance(other, KBCard):
             # alleen tegen hetzelfde type verglijken
@@ -38,7 +41,7 @@ class KBCard():
         # vergelijk op ID
         return self.id == other.id
 
-    # methodes voor het tonen van KBCard objecten op de commandline
+    # methode voor het tonen van KBCard objecten op de commandline
     def print(self) -> str:
         return '\n'.join([
             "\n\n+-------------->\n"
@@ -51,11 +54,16 @@ class KBCard():
             "+-------------->\n"
             ])
 
-    # card weergave in lijst
+    # card weergave in lijst op de commandline
     def listprint(self) -> str:
         return ' '.join([str(self.id), self.title, "->", self.stage.name, "(t:", self.team, "p:", self.project, ")"])
 
-    # functie voor het ophalen van gebruikers input voor de card
+    # card weergave als HTML
+    def htmlprint(self) -> str:
+        html = Template(kb_html.BLOCK)
+        return html.safe_substitute(ID=self.id, TITLE=self.title, DESC=self.description, PRIO='1', TEAM=self.team, PROJECT=self.project)
+
+    # methode voor het ophalen van gebruikers input voor de card
     def fillCard(self):
 
         # vraag gebruiker om team en/of project

@@ -142,7 +142,7 @@ class ClientPrompt(KBPrompt):
             board = TeamProjectBoard(user_team, user_project)
 
         if board is not None:
-            dispatcher = BoardDispatcher(board)
+            dispatcher = BoardDispatcher(board, True)
             dispatcher.start()
 
 
