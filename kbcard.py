@@ -31,9 +31,8 @@ class KBCard():
         self.title = ""
         self.description = ""
         self.stage = Stage.BACKLOG
-        # TODO PRIO
 
-    # override compare functie, zodat card vergeleken worden aan de hand van id ipv hash
+    # override compare functie, zodat cards vergeleken worden aan de hand van id ipv hash
     def __eq__(self, other): 
         if not isinstance(other, KBCard):
             # alleen tegen hetzelfde type verglijken
@@ -61,7 +60,7 @@ class KBCard():
     # card weergave als HTML
     def htmlprint(self) -> str:
         html = Template(kb_html.BLOCK)
-        return html.safe_substitute(ID=self.id, TITLE=self.title, DESC=self.description, PRIO='1', TEAM=self.team, PROJECT=self.project)
+        return html.safe_substitute(ID=self.id, TITLE=self.title, DESC=self.description, TEAM=self.team, PROJECT=self.project)
 
     # methode voor het ophalen van gebruikers input voor de card
     def fillCard(self):

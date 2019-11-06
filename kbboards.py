@@ -1,3 +1,10 @@
+""" kbboards.py: Abstracte Board klasse, en implementaties daarvan 
+    Auteur: Tako Lansbergen, Novi Hogeschool
+    Studentnr.: 800009968
+    Leerlijn: Python
+    Datum: 06 nov 2019
+"""
+
 from abc import ABC, abstractmethod # ten behoeve van abstracte klasse (Abstract Base Class)
 import pickle
 from string import Template

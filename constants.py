@@ -7,7 +7,7 @@
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.6"
+APP_VERSION = "v0.8"
 
 KB_OK = "succes"
 KB_NOT_OK = "error"

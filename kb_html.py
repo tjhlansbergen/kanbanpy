@@ -57,9 +57,8 @@ $DESC
 </div>
 <div class="card_footer">
 <ul>
-<li><i>Prio: </i>$PRIO</li>
-<li><i>Team: </i>$TEAM</li>
-<li><i>Project: </i>$PROJECT</li>
+<li>Team: <i>$TEAM</i></li>
+<li>Project: <i>$PROJECT</i></li>
 </ul>
 </div>
 </li>
