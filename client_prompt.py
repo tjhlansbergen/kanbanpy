@@ -33,6 +33,7 @@ class ClientPrompt(KBPrompt):
             "delete card": "dcard",
             "list cards": "lcards",
             "show board": "sboard",
+            "refresh board": "rboard",
             "help": "help",
             "exit": "exit"
         }
@@ -145,6 +146,36 @@ class ClientPrompt(KBPrompt):
             dispatcher = BoardDispatcher(board, True)
             dispatcher.start()
 
+    def rboard(self):
+
+        # vraag gebruiker om team en/of project
+        user_team = input(constants.INP_TEAM).lower()
+        user_project = input(constants.INP_PROJECT).lower()
+        if user_team == "" and user_project == "":
+            print(constants.MSG_CLIENT_NO_TEAMORPROJECT)
+            return
+
+        board = None
+
+        # check type board
+        if user_team == "":
+
+            # project board
+            board = ProjectBoard(user_project)
+
+        elif user_project == "":
+
+            # team board
+            board = TeamBoard(user_team)
+
+        else:
+
+            # TeamProjectBoard
+            board = TeamProjectBoard(user_team, user_project)
+
+        if board is not None:
+            dispatcher = BoardDispatcher(board, False)
+            dispatcher.start()
 
 
 

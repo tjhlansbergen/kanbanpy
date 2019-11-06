@@ -22,7 +22,7 @@ INP_PROJECT = "Specify a project name, or leave blank: "
 INP_TITLE = "Specify a title for your card: "
 INP_DESCRIPTION = "Specify a description (max 120 characters): "
 INP_CARDNUMBER = "Specify Card number: "
-INP_STAGE = "Specify stage (Hold, Backlog, Doing, Testing, Documenting, Delivering, Done): "
+INP_STAGE = "Specify stage (Backlog, ToDo, Doing, Done): "
 
 ERR_SENDING_REQUEST = "Error sending request to server: "
 ERR_RECEIVING_REQUEST = "Error, a request was send but not succesfully received "
@@ -50,19 +50,22 @@ MSG_CLIENT_DESCRIPTION_TOLONG = "Card description is too long"
 MSG_CLIENT_NO_TEAMORPROJECT = "Team and project cannot both be blank, please specify either a team name, a project name or both"
 MSG_CLIENT_INVALID_CARDNUMBER = "Sorry, that's not a valid card number"
 MSG_CLIENT_INVALID_STAGE = "Sorry, that's not a valid stage name"
-MSG_CLIENT_NOCARD = "No card found with specified ID"
+MSG_CLIENT_NOCARD = "No card(s) found"
 MSG_CLIENT_HELP = """
 =============================================================================================
 The following options are available on the commandline:
 
-  create card:  Adds a new card to the repository, pinned to either a project, a team or both
-  read card:    Reads a single card from the repository
-  move card:    Edits the stage of an existing card in the repository
-  delete card:  To permanently delete a card from the repository
-  list cards:   Lists all cards
+  create card:    Adds a new card to the repository, pinned to either a project, a team or both
+  read card:      Reads a single card from the repository
+  move card:      Edits the stage of an existing card in the repository
+  delete card:    To permanently delete a card from the repository
+  list cards:     Lists all cards
 
-  help:         Displays this manual
-  exit:         To exit the kanbanpy program
+  show board:     Generates HTML view for your tasks based on project, team or both
+  refresh board:  Generates HTML like above, but without opening a browser window
+
+  help:           Displays this manual
+  exit:           To exit the kanbanpy CLIENT program
 
 =============================================================================================
 """
@@ -71,7 +74,7 @@ MSG_SERVER_HELP = """
 The following options are available on the commandline:
 
   help:         Displays this manual
-  exit:         To exit the kanbanpy program
+  exit:         To exit the kanbanpy SERVER program
 
 =============================================================================================
 """

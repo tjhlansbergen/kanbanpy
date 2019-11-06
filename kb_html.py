@@ -18,28 +18,28 @@ $CSS
 
 <ol class="kanban backlog">
 <div class="kanban__title">
-<h2>&bernou; | Backlog</h2>
+<h2>&#9887;<br/>Backlog</h2>
 </div>
 $BACKLOG	 
 </ol>
 
 <ol class="kanban todo">
 <div class="kanban__title">
-<h2>&star; | Todo</h2>
+<h2>&star;<br/>Todo</h2>
 </div>
 $TODO
 </ol>
 
 <ol class="kanban doing">
 <div class="kanban__title">
-<h2>&weierp; | Doing</h2>
+<h2>&#9935;<br/>Doing</h2>
 </div>
 $DOING
 </ol>
 
 <ol class="kanban done">
 <div class="kanban__title">
-<h2>&check; | Done</h2>
+<h2>&check;<br/>Done</h2>
 </div>
 $DONE
 </ol>
