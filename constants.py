@@ -3,11 +3,11 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 24 okt 2019
+    Datum: 18 nov 2019
 """
 
 APP_NAME = "kanbanpy"
-APP_VERSION = "v0.8"
+APP_VERSION = "v1.0"
 
 KB_OK = "succes"
 KB_NOT_OK = "error"
@@ -19,8 +19,8 @@ INTERFACE_COMMANDS = ('create','read','update','delete','select')
 INP_SERVER_CLIENT = "Run as server or client (s/c)? "
 INP_TEAM = "Specify a team name, or leave blank: "
 INP_PROJECT = "Specify a project name, or leave blank: "
-INP_TITLE = "Specify a title for your card: "
-INP_DESCRIPTION = "Specify a description (max 120 characters): "
+INP_TITLE = "Specify a title for your card (max 20 characters): "
+INP_DESCRIPTION = "Specify a description (max 250 characters): "
 INP_CARDNUMBER = "Specify Card number: "
 INP_STAGE = "Specify stage (Backlog, ToDo, Doing, Done): "
 

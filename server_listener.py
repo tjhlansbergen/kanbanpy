@@ -3,7 +3,7 @@
     Auteur: Tako Lansbergen, Novi Hogeschool
     Studentnr.: 800009968
     Leerlijn: Python
-    Datum: 22 okt 2019
+    Datum: 18 nov 2019
 """
 
 import datetime
