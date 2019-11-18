@@ -23,8 +23,13 @@ class ServerListener(Thread):
 
         # with zorgt voor het sluiten van de socket
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.bind((socket.gethostname(), config.SERVER_PORT))
-            s.listen()
+
+            try:
+                s.bind((socket.gethostname(), config.SERVER_PORT))
+                s.listen()
+            except OSError:
+                print(constants.ERR_SERVER_RUNNING)
+                return
 
             # wacht op inkomende verbindingen
             while True: 

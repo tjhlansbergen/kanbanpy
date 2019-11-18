@@ -29,6 +29,7 @@ ERR_RECEIVING_REQUEST = "Error, a request was send but not succesfully received 
 ERR_DB_CREATION = "Error bij het aanmaken van een nieuwe database: "
 ERR_DB_INSERTION = "Error bij het invoegen van nieuwe data in de database: "
 ERR_IO_ERROR = "Error bij het schrijven naar bestand: "
+ERR_SERVER_RUNNING = "Kanbanpy SERVER is already running, please type exit to exit!"
 
 MSG_UNKNOWN_COMMAND = "Unknown command, type help for available options"
 MSG_NOT_IMPLEMENTED = "Not yet implemented!"
